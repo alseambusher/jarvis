@@ -1,0 +1,11 @@
+#!/bin/bash
+type xdotool 2>/dev/null
+if [ $? -ne 0 ]
+then
+    echo "Dependencies have to be installed"
+#Uncomment or comment depending on your package manager
+#   sudo aptitude install xdotool
+#   sudo pacman install xdotool
+    sudo apt-get install xdotool
+fi
+#TODO generate make file here
