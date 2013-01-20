@@ -1,11 +1,11 @@
 #!/bin/bash
-type xdotool 2>/dev/null
+type xdotool xprop xwit 2>/dev/null
 if [ $? -ne 0 ]
 then
     echo "Dependencies have to be installed"
 #Uncomment or comment depending on your package manager
-#   sudo aptitude install xdotool
-#   sudo pacman install xdotool
-    sudo apt-get install xdotool
+#   sudo aptitude install xdotool xprop xwit
+#   sudo pacman install xdotool xprop xwit
+    sudo apt-get install xdotool xprop xwit
 fi
 #TODO generate make file here

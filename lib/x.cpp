@@ -1,5 +1,7 @@
-//To port to other os without xdotool edit this file
+//To port to other os without xdotool,xwit,xprop edit this file
+#include<stdio.h>
 #include<stdlib.h>
+#include<unistd.h>
 void test(){
     system("ls");
 }
