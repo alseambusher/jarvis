@@ -9,5 +9,6 @@ def window_id(window=None):
 def minimize(_id=None):
     if not _id:
         _id=window_id()
-        print "xwit -id %s -iconify"%_id
         basic._exe("xwit -id %s -iconify"%_id)
+    else:
+        pass
