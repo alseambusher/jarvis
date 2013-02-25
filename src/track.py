@@ -47,6 +47,7 @@ while(1):
 		posx=cv.Round((pt1[0]+pt2[0])/2)
 		posy=cv.Round((pt1[1]+pt2[1])/2)
 		if lastx!=0 and lasty!=0:
+			print posx,posy
 			cv.Line(imdraw,(posx,posy),(lastx,lasty),(0,255,255))
 			cv.Circle(imdraw,(posx,posy),5,(0,255,255),-1)
 	cv.Add(test,imdraw,test)

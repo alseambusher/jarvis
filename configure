@@ -7,5 +7,6 @@ then
 #   sudo aptitude install xdotool xprop xwit
 #   sudo pacman install xdotool xprop xwit
 #   sudo yum install xdootool xprop xwit
+#   sudo brew install xdootool xprop xwit
     sudo apt-get install xdotool xprop xwit
 fi
