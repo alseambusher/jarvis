@@ -14,15 +14,17 @@ capture=cv.CaptureFromCAM(0)
 frame = cv.QueryFrame(capture)
 frame_size = cv.GetSize(frame)
 grey_image = cv.CreateImage(cv.GetSize(frame), cv.IPL_DEPTH_8U, 1)
-test=cv.CreateImage(cv.GetSize(frame),8,3)
+#test=cv.CreateImage(cv.GetSize(frame),8,3)
 cv.NamedWindow("Real")
-cv.NamedWindow("Threshold")
+#cv.NamedWindow("Threshold")
 while(1):
 	color_image = cv.QueryFrame(capture)
 	imdraw=cv.CreateImage(cv.GetSize(frame),8,3)
 	cv.Flip(color_image,color_image,1)
 	cv.Smooth(color_image, color_image, cv.CV_GAUSSIAN, 3, 0)
 	imgyellowthresh=getthresholdedimg(color_image)
+
+	#test=getthresholdedimg(color_image)
 	cv.Erode(imgyellowthresh,imgyellowthresh,None,3)
 	cv.Dilate(imgyellowthresh,imgyellowthresh,None,10)
 
@@ -50,11 +52,11 @@ while(1):
 			print posx,posy
 			cv.Line(imdraw,(posx,posy),(lastx,lasty),(0,255,255))
 			cv.Circle(imdraw,(posx,posy),5,(0,255,255),-1)
-	cv.Add(test,imdraw,test)
+	#cv.Add(test,imdraw,test)
 
 	cv.ShowImage("Real",color_image)
-	cv.ShowImage("Threshold",test)
+	#cv.ShowImage("Threshold",test)
 	if cv.WaitKey(33)==1048603:
 		cv.DestroyWindow("Real")
-		cv.DestroyWindow("Threshold")
+		#cv.DestroyWindow("Threshold")
 		break
