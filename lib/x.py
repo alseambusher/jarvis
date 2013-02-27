@@ -14,9 +14,14 @@ def minimize(_id=None):
     else:
         basic._exe("xwit -id %s -iconify"%_id)
 
+def mousemove(x=0,y=0):
+    basic._exe("xdotool mousemove %d %d"%(x,y))
+
 #resize window if it is not maximized
 def window_resize(width,height,_id=None):
     if not _id:
         basic._exe("xwit -id `xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'| cut -d '#' -f 2` -resize %s %s"%(width,height))
     else:
         basic._exe("xwit -id %s -resize %s %s"%(_id,width,height))
+def test():
+    print "alse"
