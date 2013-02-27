@@ -11,3 +11,6 @@ def pipe(command,kind='str'):
     else:
         return subprocess.Popen(command,shell=False,stdout=subprocess.PIPE).stdout.readlines()
 
+class dummy_object():#this is just a dummy object
+    pass
+

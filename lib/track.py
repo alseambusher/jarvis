@@ -1,4 +1,5 @@
 import cv
+from basic import dummy_object
 def getthresholdedimg(im):
     '''this function take RGB image.Then convert it into HSV for easy colour detection and threshold it with yellow part as white and all other regions as black.Then return that image'''
     imghsv=cv.CreateImage(cv.GetSize(im),8,3)
@@ -41,9 +42,9 @@ def track_data(frame):#this gets all data from a given frame
         cv.Rectangle(color_image, pt1, pt2, cv.CV_RGB(255,0,0), 1)
 
         #this will have center of each column
-        center=(bound_rect[0]+bound_rect[2]/2,
-                bound_rect[1]+bound_rect[3]/2)
-        centers.append(center)
+        centers.append(
+            (bound_rect[0]+bound_rect[2]/2,bound_rect[1]+bound_rect[3]/2)
+        )
 
         lastx=posx
         lasty=posy
@@ -52,5 +53,18 @@ def track_data(frame):#this gets all data from a given frame
         if lastx!=0 and lasty!=0:
             cv.Line(imdraw,(posx,posy),(lastx,lasty),(0,255,255))
             cv.Circle(imdraw,(posx,posy),5,(0,255,255),-1)
-
-    return color_image,{'center':center,'centers':centers,'areas':areas}
+    #compute center TODO Find center of left and right hands
+    try:
+        center={'x':0,'y':0}
+        for c in centers:
+            center['x']+=c[0]
+            center['y']+=c[1]
+        center['x']=center['x']/len(centers)
+        center['y']=center['y']/len(centers)
+    except:
+        center=None
+    data=dummy_object()
+    data.center=center
+    data.centers=centers
+    data.areas=areas
+    return color_image,data
