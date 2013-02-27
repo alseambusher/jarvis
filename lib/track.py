@@ -1,7 +1,6 @@
 import cv
 from basic import dummy_object
 def getthresholdedimg(im):
-    '''this function take RGB image.Then convert it into HSV for easy colour detection and threshold it with yellow part as white and all other regions as black.Then return that image'''
     imghsv=cv.CreateImage(cv.GetSize(im),8,3)
     cv.CvtColor(im,imghsv,cv.CV_BGR2HSV)				# Convert image from RGB to HSV
     imgthreshold=cv.CreateImage(cv.GetSize(im),8,1)
@@ -43,7 +42,7 @@ def track_data(frame):#this gets all data from a given frame
 
         #this will have center of each column
         centers.append(
-            (bound_rect[0]+bound_rect[2]/2,bound_rect[1]+bound_rect[3]/2)
+            (cv.Round((pt1[0]+pt2[0])/2),cv.Round((pt1[1]+pt2[1])/2))
         )
 
         lastx=posx
