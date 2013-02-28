@@ -3,7 +3,7 @@ import lib.track,lib.x
 def main():
     old_center=None
     capture=cv.CaptureFromCAM(0)
-    #cv.NamedWindow("jarvis")
+    cv.NamedWindow("jarvis")
     while(1):
         color_image,data=lib.track.track_data(cv.QueryFrame(capture))
         if(data.center and (data.center!=old_center)):
@@ -15,9 +15,9 @@ def main():
                     #old_center=data.center
             #except:
                 #old_center=data.center
-        #cv.ShowImage("jarvis",color_image)
+        cv.ShowImage("jarvis",color_image)
         if cv.WaitKey(33)==1048603:
-            #cv.DestroyWindow("jarvis")
+            cv.DestroyWindow("jarvis")
             exit()
 
 if __name__=='__main__':
