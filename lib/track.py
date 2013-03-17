@@ -9,10 +9,7 @@ def getthresholdedimg(im):
     return imgthreshold
 
 def track_data(frame):#this gets all data and the color_image from a given frame
-    #posx=0
-    #posy=0
     color_image = frame
-    #imdraw=cv.CreateImage(cv.GetSize(color_image),8,3)
     cv.Flip(color_image,color_image,1)
     cv.Smooth(color_image, color_image, cv.CV_GAUSSIAN, 3, 0)
     imgyellowthresh=getthresholdedimg(color_image)
@@ -42,14 +39,6 @@ def track_data(frame):#this gets all data and the color_image from a given frame
         #Compute areas
         areas.append(pow((pt1[0]-pt2[0]),2))
 
-        #lastx=posx
-        #lasty=posy
-        #posx=cv.Round((pt1[0]+pt2[0])/2)
-        #posy=cv.Round((pt1[1]+pt2[1])/2)
-        #if lastx!=0 and lasty!=0:
-            #cv.Line(imdraw,(posx,posy),(lastx,lasty),(0,255,255))
-            #cv.Circle(imdraw,(posx,posy),5,(0,255,255),-1)
-    #compute center TODO Find center of left and right hands
     #Computing center
     try:
         center={'x':0,'y':0}
@@ -66,3 +55,11 @@ def track_data(frame):#this gets all data and the color_image from a given frame
     data.centers=centers
     data.areas=areas
     return color_image,data
+
+def optimize_mouse_center(old_center,new_center):#returns optimized centers based on old centers
+    #TODO add acceleration component
+    #TODO remove shiver component
+    if(new_center and (old_center!=new_center)):
+        #TODO optimize this
+        return (new_center['x']*1380)/640,(new_center['y']*800)/480
+    return None
