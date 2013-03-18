@@ -1,4 +1,6 @@
 import basic
+import cv
+import colorsys
 
 #returns window id
 def window_id(window=None):
@@ -25,3 +27,10 @@ def window_resize(width,height,_id=None):
         basic._exe("xwit -id %s -resize %s %s"%(_id,width,height))
 def test():
     print "alse"
+
+def get_clicked_color(event,x,y,flags,param):
+    if event==cv.CV_EVENT_LBUTTONDOWN:
+        color=cv.Get2D(param,y,x)
+        #print color[::-1]
+        print colorsys.rgb_to_hsv(color[2],color[1],color[0])
+        #print "R: %d G %d B %d"%(color[2],color[1],color[0])

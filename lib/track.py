@@ -59,7 +59,9 @@ def track_data(frame):#this gets all data and the color_image from a given frame
 def optimize_mouse_center(old_center,new_center):#returns optimized centers based on old centers
     #TODO add acceleration component
     #TODO remove shiver component
-    if(new_center and (old_center!=new_center)):
-        #TODO optimize this
-        return (new_center['x']*1380)/640,(new_center['y']*800)/480
-    return None
+    try:
+        if(new_center and (old_center!=new_center)):
+            return (new_center['x']*1380)/640,(new_center['y']*800)/480
+    except:
+        pass
+    return None,None

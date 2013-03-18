@@ -1,14 +1,18 @@
 import cv
 import lib.track,lib.x
+from lib.x import get_clicked_color
 def main():
     old_center=None
     capture=cv.CaptureFromCAM(0)
-    #cv.NamedWindow("jarvis")
+    cv.NamedWindow("jarvis")
+
+    cv.SetMouseCallback("jarvis",get_clicked_color,cv.QueryFrame(capture))
     while(1):
         color_image,data=lib.track.track_data(cv.QueryFrame(capture))
         #Optimize mouse center based on previous data before moving mouse
-        if(lib.track.optimize_mouse_center(old_center,data.center)):
-            lib.x.mousemove(lib.track.optimize_mouse_center(old_center,data.center))
+        optimized_centerX,optimized_centerY=lib.track.optimize_mouse_center(old_center,data.center)
+        if(optimized_centerX and optimized_centerY):
+            lib.x.mousemove(optimized_centerX,optimized_centerY)
             old_center=data.center
             #try:
                 #if((data.center['x'] not in range(old_center['x']-5,old_center['x']+5)) and (data.center['x'] not in range(old_center['x']-5,old_center['x']+5))):
@@ -16,9 +20,9 @@ def main():
                     #old_center=data.center
             #except:
                 #old_center=data.center
-        #cv.ShowImage("jarvis",color_image)
+        cv.ShowImage("jarvis",color_image)
         if cv.WaitKey(33)==1048603:
-            #cv.DestroyWindow("jarvis")
+            cv.DestroyWindow("jarvis")
             exit()
 
 if __name__=='__main__':
