@@ -28,6 +28,7 @@ def window_resize(width,height,_id=None):
 def test():
     print "alse"
 
+#click to obtain color of any object
 def get_clicked_color(event,x,y,flags,param):
     if event==cv.CV_EVENT_LBUTTONDOWN:
         color=cv.Get2D(param,y,x)
