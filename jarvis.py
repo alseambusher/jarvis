@@ -8,6 +8,7 @@ def main():
     cv.SetMouseCallback("jarvis",x.get_clicked_color,cv.QueryFrame(capture))
     while(1):
         color_image,data=track.track_data(cv.QueryFrame(capture))
+        data=track.filter_fingers(data)
         #Optimize mouse center based on previous data before moving mouse
         optimized_centerX,optimized_centerY=track.optimize_mouse_center(old_center,data.center)
         if(optimized_centerX and optimized_centerY):

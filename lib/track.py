@@ -1,3 +1,11 @@
+"""
+Functions in this file
+    getthresholdedimg(im)
+    track_data(frame)
+    optimize_mouse_center(old_center,new_center)
+    filter_fingers(data)
+    find_center(centers)
+"""
 import cv
 from basic import dummy_object
 import config
@@ -41,12 +49,7 @@ def track_data(frame):#this gets all data and the color_image from a given frame
 
     #Computing center
     try:
-        center={'x':0,'y':0}
-        for c in centers:
-            center['x']+=c[0]
-            center['y']+=c[1]
-        center['x']=center['x']/len(centers)
-        center['y']=center['y']/len(centers)
+        center=find_center(centers)
     except:
         center=None
     #Add to data
@@ -65,3 +68,19 @@ def optimize_mouse_center(old_center,new_center):#returns optimized centers base
     except:
         pass
     return None,None
+
+def filter_fingers(data):#this function extracts the objects required
+    #TODO find the objects with mean area
+    data.center=find_center(data.centers)
+    return data
+
+#TODO test this
+def find_center(centers):#given centers this will find a center
+    center={'x':0,'y':0}
+    for c in centers:
+        center['x']+=c[0]
+        center['y']+=c[1]
+    center['x']=center['x']/len(centers)
+    center['y']=center['y']/len(centers)
+    return center
+
