@@ -48,10 +48,7 @@ def track_data(frame):#this gets all data and the color_image from a given frame
         areas.append(pow((pt1[0]-pt2[0]),2))
 
     #Computing center
-    try:
-        center=find_center(centers)
-    except:
-        center=None
+    center=find_center(centers)
     #Add to data
     data=dummy_object()
     data.center=center
@@ -76,11 +73,14 @@ def filter_fingers(data):#this function extracts the objects required
 
 #TODO test this
 def find_center(centers):#given centers this will find a center
-    center={'x':0,'y':0}
-    for c in centers:
-        center['x']+=c[0]
-        center['y']+=c[1]
-    center['x']=center['x']/len(centers)
-    center['y']=center['y']/len(centers)
-    return center
+    try:
+        center={'x':0,'y':0}
+        for c in centers:
+            center['x']+=c[0]
+            center['y']+=c[1]
+        center['x']=center['x']/len(centers)
+        center['y']=center['y']/len(centers)
+        return center
+    except:
+        center=None
 

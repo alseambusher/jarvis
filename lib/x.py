@@ -1,30 +1,42 @@
+"""
+    functions implemented in this library are:
+"""
 import basic
 import cv
 import colorsys
 
-#returns window id
-def window_id(window=None):
-    if not window:
-        return basic.pipe("xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'| cut -d '#' -f 2")
-    else:
-        pass
-
+#window id
+def window_id():
+    basic.pipe("xdotool getactivewindow getwindowfocus")
 #minimize window
-def minimize(_id=None):
-    if not _id:
-        basic._exe("xwit -id `xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'| cut -d '#' -f 2` -iconify")
-    else:
-        basic._exe("xwit -id %s -iconify"%_id)
+def window_minimize():
+    basic._exe("xdotool getactivewindow windowminimize")
 
+#window move
+def window_move(x,y):
+    basic._exe("xdotool getactivewindow windowmove %d %d"%(x,y))
+
+#switch desktop workspace
+def switch_desktop_workspace(pointer):
+    if pointer=="next":
+        basic._exe("xdotool set_desktop $((`xdotool get_desktop`+1))")
+    else:
+        basic._exe("xdotool set_desktop $((`xdotool get_desktop`-1))")
+
+#close the current window
+def window_close():
+    basic._exe("xdotool getactivewindow windowkill")
+#move mouse
 def mousemove(x=0,y=0):
     basic._exe("xdotool mousemove %d %d"%(x,y))
 
 #resize window if it is not maximized
-def window_resize(width,height,_id=None):
-    if not _id:
-        basic._exe("xwit -id `xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'| cut -d '#' -f 2` -resize %s %s"%(width,height))
-    else:
-        basic._exe("xwit -id %s -resize %s %s"%(_id,width,height))
+def window_resize(width,height):
+    basic._exe("xdotool getactivewindow windowsize %d %d"%(width,height))
+    #if not _id:
+        #basic._exe("xwit -id `xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'| cut -d '#' -f 2` -resize %s %s"%(width,height))
+    #else:
+        #basic._exe("xwit -id %s -resize %s %s"%(_id,width,height))
 def test():
     print "alse"
 

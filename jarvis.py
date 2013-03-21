@@ -3,9 +3,9 @@ from lib import track,x
 def main():
     old_center=None
     capture=cv.CaptureFromCAM(0)
-    cv.NamedWindow("jarvis")
+    #cv.NamedWindow("jarvis")
     #Click on named window and obtain its color using this callback
-    cv.SetMouseCallback("jarvis",x.get_clicked_color,cv.QueryFrame(capture))
+    #cv.SetMouseCallback("jarvis",x.get_clicked_color,cv.QueryFrame(capture))
     while(1):
         color_image,data=track.track_data(cv.QueryFrame(capture))
         data=track.filter_fingers(data)
@@ -20,9 +20,9 @@ def main():
                     #old_center=data.center
             #except:
                 #old_center=data.center
-        cv.ShowImage("jarvis",color_image)
+        #cv.ShowImage("jarvis",color_image)
         if cv.WaitKey(33)==1048603:
-            cv.DestroyWindow("jarvis")
+            #cv.DestroyWindow("jarvis")
             exit()
 
 if __name__=='__main__':
