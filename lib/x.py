@@ -7,7 +7,8 @@ import colorsys
 
 #window id
 def window_id():
-    basic.pipe("xdotool getactivewindow getwindowfocus")
+    return basic.pipe("xdotool getactivewindow getwindowfocus")
+
 #minimize window
 def window_minimize():
     basic._exe("xdotool getactivewindow windowminimize")
@@ -26,19 +27,26 @@ def switch_desktop_workspace(pointer):
 #close the current window
 def window_close():
     basic._exe("xdotool getactivewindow windowkill")
-#move mouse
-def mousemove(x=0,y=0):
-    basic._exe("xdotool mousemove %d %d"%(x,y))
 
 #resize window if it is not maximized
 def window_resize(width,height):
     basic._exe("xdotool getactivewindow windowsize %d %d"%(width,height))
-    #if not _id:
-        #basic._exe("xwit -id `xprop -root | grep '_NET_ACTIVE_WINDOW(WINDOW)'| cut -d '#' -f 2` -resize %s %s"%(width,height))
-    #else:
-        #basic._exe("xwit -id %s -resize %s %s"%(_id,width,height))
-def test():
-    print "alse"
+
+#move mouse
+def mouse_move(x=0,y=0):
+    basic._exe("xdotool mousemove %d %d"%(x,y))
+
+def mouse_click(button,repeat=1):
+    """
+        1=left
+        2=mid
+        3-right
+    """
+    basic._exe("xdotool  click --repeat %d %d"%(repeat,button))
+
+def mouse_scroll(action,repeat=1):
+    button=4 if action=="up" else 5
+    basic._exe("xdotool  click --repeat %d %d"%(repeat,button))
 
 #click to obtain color of any object
 def get_clicked_color(event,x,y,flags,param):

@@ -68,7 +68,17 @@ def optimize_mouse_center(old_center,new_center):#returns optimized centers base
 
 def filter_fingers(data):#this function extracts the objects required
     #TODO find the objects with mean area
-    data.center=find_center(data.centers)
+    #TODO FIX this
+    max_area=0
+    maxi=0
+    for i in range(0,len(data.areas)):
+        if data.areas[i]>max_area:
+            max_area=data.areas[i]
+            maxi=i
+    try:
+        data.center={'x':data.centers[maxi][0],'y':data.centers[maxi][1]}
+    except:
+        data.center=find_center(data.centers)
     return data
 
 #TODO test this
