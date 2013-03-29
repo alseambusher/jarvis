@@ -1,4 +1,13 @@
-import cv
-TRACKER_COLOR={'MIN':cv.Scalar(20,100,100),'MAX':cv.Scalar(30,255,255)}
+# Configuration file of JARVIS
+
+      #    ##    #####   #    #     #     ####
+      #   #  #   #    #  #    #     #    #
+      #  #    #  #    #  #    #     #     ####
+      #  ######  #####   #    #     #         #
+ #    #  #    #  #   #    #  #      #    #    #
+  ####   #    #  #    #    ##       #     ####
+
+
+TRACKER_COLOR={'MIN':[20,100,100],'MAX':[30,255,255]}
 RESOLUTION=[1366,768]
-MANUAL_CONFIGURATION=False
+MANUAL_CONFIGURATION=True

@@ -25,7 +25,6 @@ def track_data(frame):#this gets all data and the color_image from a given frame
     cv.Dilate(imgyellowthresh,imgyellowthresh,None,10)
     storage = cv.CreateMemStorage(0)
     contour = cv.FindContours(imgyellowthresh, storage, cv.CV_RETR_CCOMP, cv.CV_CHAIN_APPROX_SIMPLE)
-    points = []
     centers=[]
     areas=[]
     #This is the new part here. ie Use of cv.BoundingRect()
@@ -38,8 +37,6 @@ def track_data(frame):#this gets all data and the color_image from a given frame
         # for more details about cv.BoundingRect,see documentation
         pt1 = (bound_rect[0], bound_rect[1])
         pt2 = (bound_rect[0] + bound_rect[2], bound_rect[1] + bound_rect[3])
-        points.append(pt1)
-        points.append(pt2)
         #cv.Rectangle(color_image, pt1, pt2, cv.CV_RGB(255,0,0), 1)
 
         #this will have center of each box
@@ -56,6 +53,7 @@ def track_data(frame):#this gets all data and the color_image from a given frame
     data.center=center
     data.centers=centers
     data.areas=areas
+    data.contour=contour
     return color_image,data
 
 def optimize_mouse_center(old_center,new_center):#returns optimized centers based on old centers

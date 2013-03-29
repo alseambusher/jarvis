@@ -63,4 +63,5 @@ def get_clicked_color(event,x,y,flags,frame):
 def keyboard_callback(key):
     if key==27:
         cv.DestroyWindow("jarvis")
+        print "Cya bye!!"
         exit()
