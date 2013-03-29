@@ -3,7 +3,7 @@
 """
 import basic
 import cv
-import colorsys
+import config
 
 #window id
 def window_id():
@@ -49,8 +49,18 @@ def mouse_scroll(action,repeat=1):
     basic._exe("xdotool  click --repeat %d %d"%(repeat,button))
 
 #click to obtain color of any object
-def get_clicked_color(event,x,y,flags,param):
-    if event==cv.CV_EVENT_LBUTTONDOWN:
-        color=cv.Get2D(param,y,x)
-        #print color[::-1]
-        print colorsys.rgb_to_hsv(color[2],color[1],color[0])# Convert RGB to HSV
+def get_clicked_color(event,x,y,flags,frame):
+    if event==cv.CV_EVENT_LBUTTONDBLCLK:
+        hsv=cv.CreateImage(cv.GetSize(frame),8,3)
+        cv.CvtColor(frame,hsv,cv.CV_BGR2HSV)
+        (h,s,v,i)=cv.Get2D(hsv,y,x)
+        config.TRACKER_COLOR={'MIN':[h,100,10],'MAX':[h+10,255,255]}
+        print "Tracker color set to: ",config.TRACKER_COLOR
+        #stop configuration rocess if enabled
+        config.MANUAL_CONFIGURATION=False
+
+#keyboard_callback
+def keyboard_callback(key):
+    if key==27:
+        cv.DestroyWindow("jarvis")
+        exit()
