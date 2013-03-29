@@ -2,9 +2,8 @@ import cv
 from lib import track,x
 def main():
     old_center=None
-    mouse_clicked=False
     capture=cv.CaptureFromCAM(0)
-    #cv.NamedWindow("jarvis")
+    cv.NamedWindow("jarvis")
     #Click on named window and obtain its color using this callback
     #cv.SetMouseCallback("jarvis",x.get_clicked_color,cv.QueryFrame(capture))
     while(1):
@@ -12,22 +11,18 @@ def main():
         data=track.filter_fingers(data)
         #Optimize mouse center based on previous data before moving mouse
         optimized_centerX,optimized_centerY=track.optimize_mouse_center(old_center,data.center)
-        if (old_center == data.center) and not mouse_clicked:
-            x.mouse_click(1)
-            mouse_clicked=True
         if(optimized_centerX and optimized_centerY):
             x.mouse_move(optimized_centerX,optimized_centerY)
             old_center=data.center
-            mouse_clicked=False
             #try:
                 #if((data.center['x'] not in range(old_center['x']-5,old_center['x']+5)) and (data.center['x'] not in range(old_center['x']-5,old_center['x']+5))):
                     #x.mousemove((data.center['x']*1380)/640,(data.center['y']*800)/480)
                     #old_center=data.center
             #except:
                 #old_center=data.center
-        #cv.ShowImage("jarvis",color_image)
+        cv.ShowImage("jarvis",color_image)
         if cv.WaitKey(33)==1048603:
-            #cv.DestroyWindow("jarvis")
+            cv.DestroyWindow("jarvis")
             exit()
 
 if __name__=='__main__':
