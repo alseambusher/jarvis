@@ -94,4 +94,3 @@ def find_center(centers):#given centers this will find a center
         return center
     except:
         center=None
-
