@@ -1,10 +1,12 @@
 import cv
-from lib import track,x
+from lib import track,x,gesture
 import config
 def main():
     old_center=None
     capture=cv.CaptureFromCAM(0)
     cv.NamedWindow("jarvis")
+    #access gesture.all_gestures to access all gestures
+    gesture.read_gestures()
     #Click on named window and obtain its color using this callback
     cv.SetMouseCallback("jarvis",x.get_clicked_color,cv.QueryFrame(capture))
 

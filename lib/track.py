@@ -82,7 +82,6 @@ def filter_fingers(data):#this function extracts the objects required
         data.center=find_center(data.centers)
     return data
 
-#TODO test this
 def find_center(centers):#given centers this will find a center
     try:
         center={'x':0,'y':0}
