@@ -1,5 +1,7 @@
 ##Introdution
-Control your computer using hand motion, guestures and voice commands using Jarvis.  
+Control your LINUX system using hand motion, guestures using Jarvis.  
 _Under construction_
+##Port to windows
+Well, I am not interested. But if you are, you just have to tweak the file lib/x.py.
 #TODO
 everything :P

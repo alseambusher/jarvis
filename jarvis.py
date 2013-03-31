@@ -13,6 +13,7 @@ def main():
     #If manual configuration is enabled
     while config.MANUAL_CONFIGURATION:
         configuration=cv.QueryFrame(capture)
+        print cv.GetSize(configuration)
         cv.Flip(configuration,configuration,1)
         cv.ShowImage("jarvis",configuration)
         x.keyboard_callback(cv.WaitKey(10))
@@ -23,6 +24,8 @@ def main():
         data=track.filter_fingers(data)
         #Optimize mouse center based on previous data before moving mouse
         optimized_centerX,optimized_centerY=track.optimize_mouse_center(old_center,data.center)
+        if config.TRACK:
+            print (optimized_centerX,optimized_centerY)
         if(optimized_centerX and optimized_centerY):
             x.mouse_move(optimized_centerX,optimized_centerY)
             old_center=data.center

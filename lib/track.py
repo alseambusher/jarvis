@@ -32,12 +32,12 @@ def track_data(frame):#this gets all data and the color_image from a given frame
     while contour:
         # Draw bounding rectangles
         bound_rect = cv.BoundingRect(list(contour))
-        cv.DrawContours(color_image,contour,cv.CV_RGB(255,0,0),cv.CV_RGB(0,0,255),0,2,8)
+        #cv.DrawContours(color_image,contour,cv.CV_RGB(255,0,0),cv.CV_RGB(0,0,255),0,2,8)
         contour = contour.h_next()
         # for more details about cv.BoundingRect,see documentation
         pt1 = (bound_rect[0], bound_rect[1])
         pt2 = (bound_rect[0] + bound_rect[2], bound_rect[1] + bound_rect[3])
-        #cv.Rectangle(color_image, pt1, pt2, cv.CV_RGB(255,0,0), 1)
+        cv.Rectangle(color_image, pt1, pt2, cv.CV_RGB(255,0,0), 1)
 
         #this will have center of each box
         centers.append(
