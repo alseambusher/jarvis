@@ -8,10 +8,9 @@ class PyApp(gtk.Window):
         super(PyApp, self).__init__()
 
         self.set_title("Jarvis Gesture Analyzer")
-        #self.set_size_request(300, 250)
         self.set_border_width(8)
         self.set_position(gtk.WIN_POS_CENTER)
-	self.modify_bg(gtk.STATE_NORMAL,gtk.gdk.Color("#777"))
+        self.modify_bg(gtk.STATE_NORMAL,gtk.gdk.Color("#eee"))
 
         table = gtk.Table(8, 4, False)
         table.set_col_spacings(3)
@@ -41,9 +40,7 @@ class PyApp(gtk.Window):
         table.set_row_spacing(1, 3)
         table.attach(valign, 3, 4, 2, 3, gtk.FILL,
             gtk.FILL | gtk.EXPAND, 1, 1)
-
-       
-
+            
         self.add(table)
 
         self.connect("destroy", gtk.main_quit)

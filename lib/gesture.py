@@ -5,7 +5,7 @@ from basic import dummy_object
 all_gestures={}
 #reads gestures from JSON file
 def read_gestures():
-    fp=open("gestures.JSON")
+    fp=open("data/gestures.JSON")
     all_gestures=eval(fp.readlines()[0][:-1])
     return all_gestures
 
