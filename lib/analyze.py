@@ -98,18 +98,18 @@ old=j[0]
 for point in j:
 	cv.Line(img,old,point,(255,0,0),2)
 	old=point
-	
+
 for point in j:
 	cv.Line(img,point,point,(0,0,255),5)
-	
-GRID_SIZE=10
-gridX=minX
-while gridX<=maxX:
+
+GRID_SIZE=5
+gridX=minX-int((maxX-minX)*(0.05)/GRID_SIZE)
+while gridX<=maxX*(1.1):
 	cv.Line(img,(gridX,minY),(gridX,maxY),(0,255,0),1)
-	gridX+=(maxX-minX)/GRID_SIZE
-gridY=minY
-while gridY<=maxY:
+	gridX+=int((maxX-minX)*(1.05)/GRID_SIZE)
+gridY=minY-int((maxY-minY)*(0.05)/GRID_SIZE)
+while gridY<=maxY*(1.1):
 	cv.Line(img,(minX,gridY),(maxX,gridY),(0,255,0),1)
-	gridY+=(maxY-minY)/GRID_SIZE
+	gridY+=int((maxY-minY)*(1.05)/GRID_SIZE)
 cv.ShowImage("jarvis",img)
 cv.WaitKey(0)

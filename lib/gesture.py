@@ -1,7 +1,5 @@
-import cv
-import math
-from basic import dummy_object
 GRID_NUM=5
+ALLOWANCE=0.05 #5%
 
 all_gestures={}
 #reads gestures from JSON file
@@ -11,25 +9,43 @@ def read_gestures():
     return all_gestures
 
 #returns states through which the points have passed through
-def gesture_extract(points): 
+def gesture_extract(points):
     gesture=[]
     X=[ point[0] for point in points ]
     Y=[ point[1] for point in points ]
-    cluster_size=((max(X)-min(X))/GRID_NUM,(max(Y)-min(Y))/GRID_NUM)
+    #cluster size with allowance
+    cluster_size=((max(X)-min(X)+2*ALLOWANCE)/GRID_NUM,(max(Y)-min(Y)+2*ALLOWANCE)/GRID_NUM)
     params={'offset':(min(X),min(Y)),'size':cluster_size}
-    #array of 0s
-    zeros=[ [ 0 for i in range(GRID_NUM) ] for j in range(GRID_NUM) ]
-    gesture_array=zeros[:]
     old_cluster=find_cluster(points[0],params)
-    new_cluster=find_cluster(points[1],params)
     for point in points[1:]:
-    	new_cluster=find_cluster(point,params)
-	#TODO do something here
-	old_cluster=new_cluster
+        new_cluster=find_cluster(point,params)
+        if old_cluster!=new_cluster:
+            trend=find_trend(old_cluster,new_cluster)
+            #Dont add if it is already there
+            if trend and trend != gesture[-1]:
+                gesture.push(trend)
     return gesture
-#TODO
+
 def find_cluster(point,params):
-	pass
+    relative_point=(point[0]-params['offset'][0],point[1]-params['offset'][1])
+    return (int(relative_point[0]/params['size'][0]),int(relative_point[0]/params['size'][0]))
+
+def find_trend(old_cluster,new_cluster):
+
+    if old_cluster[1]==new_cluster[1] and old_cluster[0]<new_cluster[0]:
+        return "SLR"
+
+    if old_cluster[1]==new_cluster[1] and old_cluster[0]>new_cluster[0]:
+        return "SRL"
+
+    if old_cluster[0]==new_cluster[0] and old_cluster[1]<new_cluster[1]:
+        return "VTB"
+
+    if old_cluster[0]==new_cluster[0] and old_cluster[1]>new_cluster[1]:
+        return "VBT"
+
+    return None
+
 def search_gesture(points):
     gestureEXTRACT=gesture_extract(points)
     for gesture in all_gestures.iterkeys():
