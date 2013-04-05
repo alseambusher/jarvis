@@ -1,5 +1,5 @@
 #THIS FILE WAS MADE TO CHECK THE WORKING OF GESTURE EXTRACTION
-from gesture import *
+from lib.gesture import *
 j=[
 (136, 165),
 (138, 166),
@@ -90,4 +90,19 @@ j=[
 (151, 213),
 (153, 216)
 ]
+k=[
+(136, 165),
+(138, 166),
+(141, 166),
+(145, 167),
+(153, 166),
+(165, 166),
+(180, 166),
+(201, 165),
+(221, 162),
+(242, 160),
+(261, 156),
+(284, 154)
+]
+
 print gesture_extract(j)

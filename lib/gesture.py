@@ -1,5 +1,5 @@
-GRID_NUM=5
-ALLOWANCE=0.05 #5%
+import cv
+from config import GRID_NUM,ALLOWANCE,MIN_GRID_SIZE
 
 all_gestures={}
 #reads gestures from JSON file
@@ -14,7 +14,20 @@ def gesture_extract(points):
     X=[ point[0] for point in points ]
     Y=[ point[1] for point in points ]
     #cluster size with allowance
-    cluster_size=((max(X)-min(X)+2*ALLOWANCE)/GRID_NUM,(max(Y)-min(Y)+2*ALLOWANCE)/GRID_NUM)
+    cluster_size=((max(X)-min(X))/(GRID_NUM-2*ALLOWANCE),(max(Y)-min(Y))/(GRID_NUM-2*ALLOWANCE))
+
+    #If cluster size is too small then straight line
+    if cluster_size[0]<MIN_GRID_SIZE:
+        if points[0][1]<point[len(point)-1][1]:
+            return ["VTB"]
+        else:
+            return ["VBT"]
+    if cluster_size[1]<MIN_GRID_SIZE:
+        if points[0][0]<points[len(point)-1][0]:
+            return ["SLR"]
+        else:
+            return ["SRL"]
+
     params={'offset':(min(X),min(Y)),'size':cluster_size}
     old_cluster=find_cluster(points[0],params)
     for point in points[1:]:
@@ -57,3 +70,31 @@ def search_gesture(points):
         if gestureEXTRACT==all_gestures[gesture]:
             return gesture
 
+#Returns an image after analysis
+def analyzer(points):
+    j=points
+    X=[ x[0] for x in j ]
+    Y=[ x[1] for x in j ]
+    maxX,maxY,minX,minY=max(X),max(Y),min(X),min(Y)
+    img=cv.CreateImage((640,480),8,3)
+    old=j[0]
+    for point in j:
+        cv.Line(img,old,point,(255,0,0),2)
+        old=point
+
+    for point in j:
+        cv.Line(img,point,point,(0,0,255),5)
+
+    cluster_size=((max(X)-min(X))/(GRID_NUM-2*ALLOWANCE),(max(Y)-min(Y))/(GRID_NUM-2*ALLOWANCE))
+
+    gridX=minX-ALLOWANCE*cluster_size[0]
+    while gridX<=minX+GRID_NUM*cluster_size[0]:
+        cv.Line(img,(int(gridX),int(minY-(ALLOWANCE*cluster_size[1]))),(int(gridX),int(maxY+(ALLOWANCE*cluster_size[1]))),(0,255,0),1)
+        gridX+=cluster_size[0]
+
+    gridY=minY-(ALLOWANCE*cluster_size[1])
+    while gridY<=minY+GRID_NUM*cluster_size[1]:
+        cv.Line(img,(int(minX-ALLOWANCE*cluster_size[0]),int(gridY)),(int(maxX+ALLOWANCE*cluster_size[0]),int(gridY)),(0,255,0),1)
+        gridY+=cluster_size[1]
+
+    return img,gesture_extract(points)

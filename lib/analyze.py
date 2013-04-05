@@ -11,6 +11,20 @@ j=[
 (221, 162),
 (242, 160),
 (261, 156),
+(284, 154)
+]
+k=[
+(136, 165),
+(138, 166),
+(141, 166),
+(145, 167),
+(153, 166),
+(165, 166),
+(180, 166),
+(201, 165),
+(221, 162),
+(242, 160),
+(261, 156),
 (284, 154),
 (302, 152),
 (321, 148),
@@ -102,14 +116,14 @@ for point in j:
 for point in j:
 	cv.Line(img,point,point,(0,0,255),5)
 
-GRID_SIZE=5
-gridX=minX-int((maxX-minX)*(0.05)/GRID_SIZE)
+GRID_NUM=5
+gridX=minX-int((maxX-minX)*(0.05)/GRID_NUM)
 while gridX<=maxX*(1.1):
 	cv.Line(img,(gridX,minY),(gridX,maxY),(0,255,0),1)
-	gridX+=int((maxX-minX)*(1.05)/GRID_SIZE)
-gridY=minY-int((maxY-minY)*(0.05)/GRID_SIZE)
+	gridX+=int((maxX-minX)*(1.05)/GRID_NUM)
+gridY=minY-int((maxY-minY)*(0.05)/GRID_NUM)
 while gridY<=maxY*(1.1):
 	cv.Line(img,(minX,gridY),(maxX,gridY),(0,255,0),1)
-	gridY+=int((maxY-minY)*(1.05)/GRID_SIZE)
+	gridY+=int((maxY-minY)*(1.05)/GRID_NUM)
 cv.ShowImage("jarvis",img)
 cv.WaitKey(0)
