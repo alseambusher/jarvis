@@ -17,7 +17,11 @@ def gesture_extract(points):
     Y=[ point[1] for point in points ]
     cluster_size=((max(X)-min(X))/GRID_NUM,(max(Y)-min(Y))/GRID_NUM)
     params={'offset':(min(X),min(Y)),'size':cluster_size}
+    #array of 0s
+    zeros=[ [ 0 for i in range(GRID_NUM) ] for j in range(GRID_NUM) ]
+    gesture_array=zeros[:]
     old_cluster=find_cluster(points[0],params)
+    new_cluster=find_cluster(points[1],params)
     for point in points[1:]:
     	new_cluster=find_cluster(point,params)
 	#TODO do something here
