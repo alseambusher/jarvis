@@ -1,6 +1,7 @@
 import cv
 import math
 from basic import dummy_object
+GRID_NUM=5
 
 all_gestures={}
 #reads gestures from JSON file
@@ -10,56 +11,21 @@ def read_gestures():
     return all_gestures
 
 #returns states through which the points have passed through
-def gesture_extract(points):
-    lines=extract_lines(points)
+def gesture_extract(points): 
     gesture=[]
-    for line in lines:
-        if abs(line.slope)<slope(10):#straight line
-            if line.start_point[0]<line.end_point[0]:#left ->right
-                gesture.append("SLR")
-            else: #right -> left
-                gesture.append("SRL")
-        elif abs(line.slope)<=slope(90) and abs(line.slope)>=slope(80):#vertical line
-            if line.start_point[1]<line.end_point[1]:#bottom ->top
-                gesture.append("VBT")
-            else: #top ->bottom
-                gesture.append("VTB")
-        elif line.slope<0:
-            # inclined left(IL)
-            # .
-            #  .
-            #   .
-            if line.start_point[0]<line.end_point[0]:#left ->right
-                gesture.append("ILLR")
-            else: #right -> left
-                gesture.append("ILRL")
-        else: #inclined right(IR)
-            if line.start_point[0]<line.end_point[0]:#left ->right
-                gesture.append("IRLR")
-            else: #right -> left
-                gesture.append("IRRL")
-
+    X=[ point[0] for point in points ]
+    Y=[ point[1] for point in points ]
+    cluster_size=((max(X)-min(X))/GRID_NUM,(max(Y)-min(Y))/GRID_NUM)
+    params={'offset':(min(X),min(Y)),'size':cluster_size}
+    old_cluster=find_cluster(points[0],params)
+    for point in points[1:]:
+    	new_cluster=find_cluster(point,params)
+	#TODO do something here
+	old_cluster=new_cluster
     return gesture
-
-def extract_lines(points):
-    #TODO
-    pass
-#gets the best fit line, returns line with slope,start_point,end_point
-def best_fit_line(line_points):
-    x0,y0,vx,vy=cv.FitLine(line_points,cv.CV_DIST_L2,0,0.01,0.01)
-    line=dummy_object()
-    try:#handle infinite slope
-        line.slope=vy/vx
-    except:
-        line.slope=slope(90)
-    line.start_point=line_points[0]
-    line.end_point=line_points[-1]
-    return line
-
-#finds tan of angle in degrees
-def slope(angle):
-    return math.tan((angle*math.pi)/180)
-
+#TODO
+def find_cluster(point,params):
+	pass
 def search_gesture(points):
     gestureEXTRACT=gesture_extract(points)
     for gesture in all_gestures.iterkeys():
