@@ -1,5 +1,4 @@
 import gtk
-import cv
 from lib import gesture
 k=[
 (136, 165),
@@ -91,6 +90,7 @@ k=[
 (151, 213),
 (153, 216)
 ]
+
 class PyApp(gtk.Window):
 
     def __init__(self):
@@ -105,7 +105,6 @@ class PyApp(gtk.Window):
         table.set_col_spacings(3)
         #TODO Take points from JSON
         img,sequence=gesture.analyzer(k)
-        cv.SaveImage("res/jarvis.jpg",img)
 
         self.sequence = gtk.Label("Gesture State Transition: "+"->".join(sequence))
 
@@ -116,7 +115,15 @@ class PyApp(gtk.Window):
             gtk.FILL, 0, 0);
 
         self.analyzer=gtk.Image()
-        self.analyzer.set_from_file("res/jarvis.jpg")
+        self.img_pixbuf=gtk.gdk.pixbuf_new_from_data(img.tostring(),
+                                    gtk.gdk.COLORSPACE_RGB,
+                                    False,
+                                    img.depth,
+                                    img.width,
+                                    img.height,
+                                    img.width*img.nChannels)
+        self.analyzer.set_from_pixbuf(self.img_pixbuf)
+
         table.attach(self.analyzer, 0, 2, 1, 3, gtk.FILL | gtk.EXPAND,
             gtk.FILL | gtk.EXPAND, 1, 1)
 
