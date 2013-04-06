@@ -1,6 +1,7 @@
 import gtk
 from gui import analyzer
 from gui import add as add_gesture_dialog
+from gui import edit as edit_gesture_dialog
 class Settings(gtk.Window):
     def __init__(self):
         super(Settings, self).__init__()
@@ -49,6 +50,7 @@ class Settings(gtk.Window):
 
         #ABOUT
         about=gtk.MenuItem("About")
+        #about.connect("activate",lambda x:edit_gesture_dialog.Edit('1','2','3','4'))
         helpmenu.append(about)
 
         vbox = gtk.VBox(False, 2)

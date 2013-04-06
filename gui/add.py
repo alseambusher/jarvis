@@ -15,8 +15,8 @@ class Add(gtk.Window):
         #First Row
         hbox1=gtk.HBox(True,5)
         gesture_box=gtk.TextView()
-        gesture_box_text=gtk.TextBuffer(table=None)
-        gesture_box.set_buffer(gesture_box_text)
+        self.gesture_box_text=gtk.TextBuffer(table=None)
+        gesture_box.set_buffer(self.gesture_box_text)
         #self.gesture_box.get_buffer()
         gesture_box.set_wrap_mode(True)
         gesture_box.set_size_request(400,40)
@@ -33,10 +33,10 @@ class Add(gtk.Window):
         vtb=gtk.Button("Top->Bottom")
         vbt=gtk.Button("Bottom->Top")
 
-        slr.connect("clicked",lambda x:gesture_box_text.insert_at_cursor("SLR->"))
-        srl.connect("clicked",lambda x:gesture_box_text.insert_at_cursor("SRL->"))
-        vtb.connect("clicked",lambda x:gesture_box_text.insert_at_cursor("VTB->"))
-        vbt.connect("clicked",lambda x:gesture_box_text.insert_at_cursor("VBT->"))
+        slr.connect("clicked",lambda x:self.gesture_box_text.insert_at_cursor("SLR->"))
+        srl.connect("clicked",lambda x:self.gesture_box_text.insert_at_cursor("SRL->"))
+        vtb.connect("clicked",lambda x:self.gesture_box_text.insert_at_cursor("VTB->"))
+        vbt.connect("clicked",lambda x:self.gesture_box_text.insert_at_cursor("VBT->"))
 
         hbox2.add(slr)
         hbox2.add(srl)
@@ -49,11 +49,11 @@ class Add(gtk.Window):
         #Third Row
         hbox3=gtk.HBox(False,5)
         gesture_name_label=gtk.Label("Gesture:")
-        gesture_name=gtk.Entry()
-        gesture_name.set_size_request(300,gesture_name.get_size_request()[1])
+        self.gesture_name=gtk.Entry()
+        self.gesture_name.set_size_request(300,self.gesture_name.get_size_request()[1])
 
         hbox3.add(gesture_name_label)
-        hbox3.add(gesture_name)
+        hbox3.add(self.gesture_name)
 
         halign3=gtk.Alignment(0,0,0,0)
         halign3.add(hbox3)
@@ -62,11 +62,11 @@ class Add(gtk.Window):
         #Comment
         hbox5=gtk.HBox(False,5)
         comment_label=gtk.Label("Comment:")
-        comment=gtk.Entry()
-        comment.set_size_request(300,comment.get_size_request()[1])
+        self.comment=gtk.Entry()
+        self.comment.set_size_request(300,self.comment.get_size_request()[1])
 
         hbox5.add(comment_label)
-        hbox5.add(comment)
+        hbox5.add(self.comment)
 
         halign5=gtk.Alignment(0,0,0,0)
         halign5.add(hbox5)
@@ -75,11 +75,11 @@ class Add(gtk.Window):
         #Command
         hbox6=gtk.HBox(False,5)
         command_label=gtk.Label("Command:")
-        command=gtk.Entry()
-        command.set_size_request(300,command.get_size_request()[1])
+        self.command=gtk.Entry()
+        self.command.set_size_request(300,self.command.get_size_request()[1])
 
         hbox6.add(command_label)
-        hbox6.add(command)
+        hbox6.add(self.command)
 
         halign6=gtk.Alignment(0,0,0,0)
         halign6.add(hbox6)
@@ -91,7 +91,7 @@ class Add(gtk.Window):
 
         add=gtk.Button(stock=gtk.STOCK_SAVE)
         close=gtk.Button(stock=gtk.STOCK_CLOSE)
-        add.connect("clicked",lambda x:self.add_gesture(gesture_name.get_text(),comment.get_text(),command.get_text(),self.get_text(gesture_box_text)))
+        add.connect("clicked",lambda x:self.add_gesture(self.gesture_name.get_text(),self.comment.get_text(),self.command.get_text(),self.get_text(self.gesture_box_text)))
         close.connect("clicked",lambda x:self.destroy())
 
         hbox4.add(add)
@@ -126,6 +126,13 @@ class Add(gtk.Window):
         if gesture.search_gesture_by_field('name',name):
             self.alert("Gesture name already exists!!")
             return
+
+        gesture_list=sequence.split("->")
+        for gesture_state in gesture_list:
+            if gesture_state not in ['SLR','SRL','VTB','VBT']:
+                self.alert("Gesture sequence invalid!")
+                return
+
         gesture.add_gesture(sequence,name,comment,command)
         self.alert("Successfully added gesture!","info")
         self.destroy()
