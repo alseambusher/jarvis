@@ -10,3 +10,6 @@ then
 #   sudo brew install xdootool xprop xwit
     sudo apt-get install xdotool xprop xwit
 fi
+mkdir ~/.jarvis
+cp -R * ~/.jarvis
+#TODO add menu item

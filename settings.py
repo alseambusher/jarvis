@@ -22,6 +22,7 @@ class Settings(gtk.Window):
         add.connect("activate",lambda w:add_gesture_dialog.Add())
         filemenu.append(add)
 
+        """
         #EDIT GESTURE
         edit_menu = gtk.Menu()
 
@@ -58,7 +59,7 @@ class Settings(gtk.Window):
         delete_menu.append(close_window)
 
         filemenu.append(delete)
-
+        """
         #ANALYZER
         self.analyze_all=True
         analyzer_menu=gtk.MenuItem("Analyzer")
