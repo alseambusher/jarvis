@@ -80,6 +80,13 @@ def add_gesture(sequence,name,comment,command):
     conn.commit()
     conn.close()
 
+def get_all_gestures():
+    conn=sqlite3.connect("data/gestures.db")
+    cur=conn.cursor()
+    cur.execute("select * from gestures")
+    return cur.fetchall()
+
+
 #Returns an image after analysis
 def analyzer(points):
     j=points

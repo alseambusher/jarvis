@@ -47,6 +47,7 @@ class Add(gtk.Window):
         vbox.pack_start(halign2, False, False, 10)
 
         #Third Row
+
         hbox3=gtk.HBox(False,5)
         gesture_name_label=gtk.Label("Gesture:")
         self.gesture_name=gtk.Entry()

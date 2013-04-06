@@ -1,7 +1,7 @@
 from lib import gesture
 from gui import add as add_gesture
 class Edit(add_gesture.Add):
-    def __init__(self,sequence,name,comment,command):
+    def __init__(self,name,comment,command,sequence):
         super(Edit, self).__init__()
         self.gesture_box_text.insert_at_cursor(sequence+"->")
         self.gesture_name.set_text(name)
