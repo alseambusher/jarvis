@@ -89,7 +89,7 @@ class Add(gtk.Window):
         #Fourth Row
         hbox4=gtk.HBox(False,5)
 
-        add=gtk.Button(stock=gtk.STOCK_ADD)
+        add=gtk.Button(stock=gtk.STOCK_SAVE)
         close=gtk.Button(stock=gtk.STOCK_CLOSE)
         add.connect("clicked",lambda x:self.add_gesture(gesture_name.get_text(),comment.get_text(),command.get_text(),self.get_text(gesture_box_text)))
         close.connect("clicked",lambda x:self.destroy())
@@ -138,9 +138,3 @@ class Add(gtk.Window):
     def get_text(self,TextBuffer):
         startiter, enditer = TextBuffer.get_bounds()
         return startiter.get_text(enditer)
-
-
-
-if __name__=="__main__":
-    Add()
-    gtk.main()

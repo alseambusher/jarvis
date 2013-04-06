@@ -40,6 +40,9 @@ class Settings(gtk.Window):
 
         mb.append(helpm)
 
+        #RESET
+        contents= gtk.MenuItem("Reset Jarvis")
+        helpmenu.append(contents)
         #CONTENTS
         contents= gtk.MenuItem("Contents")
         helpmenu.append(contents)
