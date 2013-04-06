@@ -5,8 +5,6 @@ def main():
     old_center=None
     capture=cv.CaptureFromCAM(0)
     cv.NamedWindow("jarvis")
-    #access gesture.all_gestures to access all gestures
-    gesture.read_gestures()
     #Click on named window and obtain its color using this callback
     cv.SetMouseCallback("jarvis",x.get_clicked_color,cv.QueryFrame(capture))
 
@@ -34,7 +32,7 @@ def main():
         if(optimized_centerX and optimized_centerY):
             x.mouse_move(optimized_centerX,optimized_centerY)
             old_center=data.center
-        cv.ShowImage("jarvis",color_image)
+        #cv.ShowImage("jarvis",color_image)
         x.keyboard_callback(cv.WaitKey(10))
 if __name__=='__main__':
     main()

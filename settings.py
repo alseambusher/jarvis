@@ -22,44 +22,6 @@ class Settings(gtk.Window):
         add.connect("activate",lambda w:add_gesture_dialog.Add())
         filemenu.append(add)
 
-        """
-        #EDIT GESTURE
-        edit_menu = gtk.Menu()
-
-        edit=gtk.MenuItem("Edit Gesture")
-        edit.set_submenu(edit_menu)
-
-
-        lclick= gtk.MenuItem("Left Click")
-        rclick= gtk.MenuItem("Right Click")
-        dclick= gtk.MenuItem("Double Click")
-        close_window= gtk.MenuItem("Close Window")
-
-        edit_menu.append(lclick)
-        edit_menu.append(rclick)
-        edit_menu.append(dclick)
-        edit_menu.append(close_window)
-
-        filemenu.append(edit)
-
-        #DELETE GESTURE
-        delete_menu = gtk.Menu()
-        delete=gtk.MenuItem("Delete Gesture")
-        delete.set_submenu(delete_menu)
-
-
-        lclick= gtk.MenuItem("Left Click")
-        rclick= gtk.MenuItem("Right Click")
-        dclick= gtk.MenuItem("Double Click")
-        close_window= gtk.MenuItem("Close Window")
-
-        delete_menu.append(lclick)
-        delete_menu.append(rclick)
-        delete_menu.append(dclick)
-        delete_menu.append(close_window)
-
-        filemenu.append(delete)
-        """
         #ANALYZER
         self.analyze_all=True
         analyzer_menu=gtk.MenuItem("Analyzer")
@@ -71,6 +33,21 @@ class Settings(gtk.Window):
         exit.connect("activate", gtk.main_quit)
         filemenu.append(exit)
 
+        #HELP
+        helpmenu = gtk.Menu()
+        helpm= gtk.MenuItem("Help")
+        helpm.set_submenu(helpmenu)
+
+        mb.append(helpm)
+
+        #CONTENTS
+        contents= gtk.MenuItem("Contents")
+        helpmenu.append(contents)
+
+        #ABOUT
+        about=gtk.MenuItem("About")
+        helpmenu.append(about)
+
         vbox = gtk.VBox(False, 2)
         vbox.pack_start(mb, False, False, 0)
 
@@ -78,6 +55,7 @@ class Settings(gtk.Window):
 
         self.connect("destroy", gtk.main_quit)
         self.show_all()
+
     def start_analyze(self,dummy):
         analyzer.Analyzer(self.analyze_all)
         self.analyze_all=False

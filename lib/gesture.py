@@ -1,12 +1,6 @@
 import cv
 from config import GRID_NUM,ALLOWANCE,MIN_GRID_SIZE
-
-all_gestures={}
-#reads gestures from JSON file
-def read_gestures():
-    fp=open("data/gestures.JSON")
-    all_gestures=eval(fp.readlines()[0][:-1])
-    return all_gestures
+import sqlite3
 
 #returns states through which the points have passed through
 def gesture_extract(points):
@@ -64,11 +58,27 @@ def find_trend(old_cluster,new_cluster):
 
     return None
 
+#pass points  full detail of gesture
 def search_gesture(points):
     gestureEXTRACT=gesture_extract(points)
-    for gesture in all_gestures.iterkeys():
-        if gestureEXTRACT==all_gestures[gesture]:
-            return gesture
+    conn=sqlite3.connect("data/gestures.db")
+    cur=conn.cursor()
+    cur.execute("select * from gestures where sequence='%s'"%'->'.join(gestureEXTRACT))
+    return cur.fetchall()
+
+#fields are name,comment,command,sequence
+def search_gesture_by_field(field,value):
+    conn=sqlite3.connect("data/gestures.db")
+    cur=conn.cursor()
+    cur.execute("select * from gestures where %s='%s'"%(field,value))
+    return cur.fetchall()
+
+def add_gesture(sequence,name,comment,command):
+    conn=sqlite3.connect("data/gestures.db")
+    cur=conn.cursor()
+    cur.execute("insert into gestures values('%s','%s','%s','%s')"%(name,comment,command,sequence))
+    conn.commit()
+    conn.close()
 
 #Returns an image after analysis
 def analyzer(points):
