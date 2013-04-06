@@ -1,4 +1,6 @@
 import gtk
+from gui import analyzer
+from gui import add as add_gesture_dialog
 class Settings(gtk.Window):
     def __init__(self):
         super(Settings, self).__init__()
@@ -17,6 +19,7 @@ class Settings(gtk.Window):
 
         #ADD GESTURE
         add=gtk.MenuItem("Add Gesture")
+        add.connect("activate",lambda w:add_gesture_dialog.Add())
         filemenu.append(add)
 
         #EDIT GESTURE
@@ -26,13 +29,15 @@ class Settings(gtk.Window):
         edit.set_submenu(edit_menu)
 
 
-        inews = gtk.MenuItem("Click")
-        ibookmarks = gtk.MenuItem("Double Click")
-        imail = gtk.MenuItem("Close Window")
+        lclick= gtk.MenuItem("Left Click")
+        rclick= gtk.MenuItem("Right Click")
+        dclick= gtk.MenuItem("Double Click")
+        close_window= gtk.MenuItem("Close Window")
 
-        edit_menu.append(inews)
-        edit_menu.append(ibookmarks)
-        edit_menu.append(imail)
+        edit_menu.append(lclick)
+        edit_menu.append(rclick)
+        edit_menu.append(dclick)
+        edit_menu.append(close_window)
 
         filemenu.append(edit)
 
@@ -42,15 +47,23 @@ class Settings(gtk.Window):
         delete.set_submenu(delete_menu)
 
 
-        inews = gtk.MenuItem("Click")
-        ibookmarks = gtk.MenuItem("Double Click")
-        imail = gtk.MenuItem("Close Window")
+        lclick= gtk.MenuItem("Left Click")
+        rclick= gtk.MenuItem("Right Click")
+        dclick= gtk.MenuItem("Double Click")
+        close_window= gtk.MenuItem("Close Window")
 
-        delete_menu.append(inews)
-        delete_menu.append(ibookmarks)
-        delete_menu.append(imail)
+        delete_menu.append(lclick)
+        delete_menu.append(rclick)
+        delete_menu.append(dclick)
+        delete_menu.append(close_window)
 
         filemenu.append(delete)
+
+        #ANALYZER
+        self.analyze_all=True
+        analyzer_menu=gtk.MenuItem("Analyzer")
+        analyzer_menu.connect("activate",self.start_analyze)
+        filemenu.append(analyzer_menu)
 
         #EXIT
         exit = gtk.MenuItem("Exit")
@@ -64,7 +77,9 @@ class Settings(gtk.Window):
 
         self.connect("destroy", gtk.main_quit)
         self.show_all()
-
+    def start_analyze(self,dummy):
+        analyzer.Analyzer(self.analyze_all)
+        self.analyze_all=False
 
 Settings()
 gtk.main()

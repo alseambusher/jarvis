@@ -4,16 +4,16 @@ import cv
 from lib import gesture
 class Analyzer(gtk.Window):
 
-    def __init__(self):
+    def __init__(self,generate=False):
         super(Analyzer, self).__init__()
         self.analyzer_data=eval(json.load(open("data/analyzer.JSON"))["points"])
         self.analyzer_index=0
-        self.analyze_all()
+        if generate:
+            self.analyze_all()
 
         self.set_title("Jarvis Gesture Analyzer")
         self.set_border_width(8)
         self.set_position(gtk.WIN_POS_CENTER)
-        self.modify_bg(gtk.STATE_NORMAL,gtk.gdk.Color("#eee"))
 
         table = gtk.Table(8, 4, False)
         table.set_col_spacings(3)
@@ -51,7 +51,7 @@ class Analyzer(gtk.Window):
 
         self.add(table)
 
-        self.connect("destroy", gtk.main_quit)
+        #self.connect("destroy", gtk.main_quit)
         self.show_all()
 
     def next_(self,dummy):
@@ -72,6 +72,9 @@ class Analyzer(gtk.Window):
         for i in range(len(self.analyzer_data)):
             img,sequence=gesture.analyzer(self.analyzer_data[i])
             cv.SaveImage("res/analyzer_"+str(i)+".bmp",img)
-Analyzer()
-gtk.main()
+
+
+if __name__=="__main__":
+    Analyzer()
+    gtk.main()
 
