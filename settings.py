@@ -12,6 +12,63 @@ class Settings(gtk.Window):
         self.set_size_request(500,500)
         self.set_position(gtk.WIN_POS_CENTER)
 
+        self.update_list()
+
+        self.connect("destroy", gtk.main_quit)
+
+    def start_analyze(self,widget):
+        analyzer.Analyzer(self.analyze_all)
+        self.analyze_all=False
+
+    def about(self,widget):
+        about = gtk.AboutDialog()
+        about.set_program_name("Jarvis")
+        about.set_version("1.0")
+        about.set_copyright("(c) Jarvis ")
+        about.set_comments("Control your computer using hand motion, gestures to improve Human-Computer Interaction.")
+        about.set_website("http://www.lifepluslinux.blogspot.in")
+        #about.set_logo(gtk.gdk.pixbuf_new_from_file("battery.png"))
+        about.run()
+        about.destroy()
+
+    def prompt(self,message,target):
+        dialog = gtk.MessageDialog(self,gtk.DIALOG_DESTROY_WITH_PARENT,gtk.MESSAGE_QUESTION,gtk.BUTTONS_OK_CANCEL,message)
+        self.dialog_response=dialog.run()
+        dialog.connect("destroy",target)
+        dialog.destroy()
+
+    def reset_jarvis(self,widget):
+        if self.dialog_response is -5:
+            if not os.system("cp data/gestures_master.db data/gestures.db"):
+                print "Jarvis reset success"
+                self.refresh_list()
+            else:
+                print "Jarvis reset failed"
+
+    def edit(self,widget):
+        gesture_name=" ".join(widget.get_label().split(" ")[1:])
+        gest=gesture.search_gesture_by_field('name',gesture_name)[0]
+        dialog=edit_gesture_dialog.Edit(str(gest[0]),str(gest[1]),str(gest[2]),str(gest[3]))
+        dialog.connect("destroy",lambda x:self.refresh_list())
+
+    def delete_prompt(self,widget):
+        gesture_name=" ".join(widget.get_label().split(" ")[1:])
+        dialog = gtk.MessageDialog(self,gtk.DIALOG_DESTROY_WITH_PARENT,gtk.MESSAGE_QUESTION,gtk.BUTTONS_OK_CANCEL,"Do you want to delete '%s'?"%gesture_name)
+        dialog_response=dialog.run()
+        dialog.connect("destroy",lambda x:self.delete(dialog_response,gesture_name))
+        dialog.destroy()
+
+    def delete(self,response,gesture_name):
+        if response is -5:
+            gesture.delete_gesture("name",gesture_name)
+            self.refresh_list()
+
+    def add_new(self,widget):
+        dialog=add_gesture_dialog.Add()
+        dialog.connect("destroy",lambda x:self.refresh_list())
+
+    def update_list(self):
+
         mb = gtk.MenuBar()
 
         filemenu = gtk.Menu()
@@ -22,7 +79,7 @@ class Settings(gtk.Window):
 
         #ADD GESTURE
         add=gtk.MenuItem("Add Gesture")
-        add.connect("activate",lambda w:add_gesture_dialog.Add())
+        add.connect("activate",self.add_new)
         filemenu.append(add)
 
         #ANALYZER
@@ -54,7 +111,7 @@ class Settings(gtk.Window):
         helpmenu.append(reset)
         helpmenu.append(about)
 
-        sv=gtk.ScrolledWindow()
+        self.sv=gtk.ScrolledWindow()
         self.vbox = gtk.VBox(False, 2)
         self.vbox.pack_start(mb, False, False, 0)
 
@@ -74,7 +131,8 @@ class Settings(gtk.Window):
 
             #edit.connect("clicked",lambda x:edit_gesture_dialog.Edit(str(gest[0]),str(gest[1]),str(gest[2]),str(gest[3])))
             edit.connect("clicked",self.edit)
-            #TODO delete
+            delete.connect("clicked",self.delete_prompt)
+
             hbox.add(edit)
             hbox.add(delete)
 
@@ -90,44 +148,13 @@ class Settings(gtk.Window):
             boolean= not boolean
             self.vbox.add(frame)
 
-        sv.add_with_viewport(self.vbox)
-        self.add(sv)
-
-        self.connect("destroy", gtk.main_quit)
+        self.sv.add_with_viewport(self.vbox)
+        self.add(self.sv)
         self.show_all()
 
-    def start_analyze(self,widget):
-        analyzer.Analyzer(self.analyze_all)
-        self.analyze_all=False
-
-    def about(self,widget):
-        about = gtk.AboutDialog()
-        about.set_program_name("Jarvis")
-        about.set_version("1.0")
-        about.set_copyright("(c) Jarvis ")
-        about.set_comments("Control your computer using hand motion, gestures to improve Human-Computer Interaction.")
-        about.set_website("http://www.lifepluslinux.blogspot.in")
-        #about.set_logo(gtk.gdk.pixbuf_new_from_file("battery.png"))
-        about.run()
-        about.destroy()
-
-    def prompt(self,message,target):
-        dialog = gtk.MessageDialog(self,gtk.DIALOG_DESTROY_WITH_PARENT,gtk.MESSAGE_QUESTION,gtk.BUTTONS_OK_CANCEL,message)
-        self.dialog_response=dialog.run()
-        dialog.connect("destroy",target)
-        dialog.destroy()
-
-    def reset_jarvis(self,widget):
-        if self.dialog_response is -5:
-            if not os.system("cp data/gestures_master.db data/gestures.db"):
-                print "Jarvis reset success"
-            else:
-                print "Jarvis reset failed"
-
-    def edit(self,widget):
-        gesture_name=" ".join(widget.get_label().split(" ")[1:])
-        gest=gesture.search_gesture_by_field('name',gesture_name)[0]
-        edit_gesture_dialog.Edit(str(gest[0]),str(gest[1]),str(gest[2]),str(gest[3]))
+    def refresh_list(self):
+        self.sv.destroy()
+        self.update_list()
 
 Settings()
 gtk.main()

@@ -73,19 +73,23 @@ def search_gesture_by_field(field,value):
     cur.execute("select * from gestures where %s='%s'"%(field,value))
     return cur.fetchall()
 
-def add_gesture(sequence,name,comment,command):
-    conn=sqlite3.connect("data/gestures.db")
-    cur=conn.cursor()
-    cur.execute("insert into gestures values('%s','%s','%s','%s')"%(name,comment,command,sequence))
-    conn.commit()
-    conn.close()
-
 def get_all_gestures():
     conn=sqlite3.connect("data/gestures.db")
     cur=conn.cursor()
     cur.execute("select * from gestures")
     return cur.fetchall()
 
+def add_gesture(sequence,name,comment,command):
+    conn=sqlite3.connect("data/gestures.db")
+    cur=conn.cursor()
+    cur.execute("insert into gestures values('%s','%s','%s','%s')"%(name,comment,command,sequence))
+    conn.commit()
+
+def delete_gesture(field,value):
+    conn=sqlite3.connect("data/gestures.db")
+    cur=conn.cursor()
+    cur.execute("delete from gestures where %s='%s'"%(field,value))
+    conn.commit()
 
 #Returns an image after analysis
 def analyzer(points):
