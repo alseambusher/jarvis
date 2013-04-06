@@ -3,4 +3,5 @@
 *.pyc
 .ropeproject/*
 .ropeproject
-res/jarvis.jpg
+res/*.png
+res/*.jpg

@@ -79,11 +79,11 @@ def analyzer(points):
     img=cv.CreateImage((640,480),8,3)
     old=j[0]
     for point in j:
-        cv.Line(img,old,point,(255,0,0),2)
+        cv.Line(img,old,point,(0,0,255),2)
         old=point
 
     for point in j:
-        cv.Line(img,point,point,(0,100,255),5)
+        cv.Line(img,point,point,(255,0,0),5)
 
     cluster_size=((max(X)-min(X))/(GRID_NUM-2*ALLOWANCE),(max(Y)-min(Y))/(GRID_NUM-2*ALLOWANCE))
 
