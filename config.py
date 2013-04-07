@@ -26,5 +26,8 @@ ANALYZE=False
 GRID_NUM=5
 ALLOWANCE=0.05 #5% of grid size
 MIN_GRID_SIZE=25
+
+#Database
 DB="data/gestures.db"
 DB_MASTER="data/gestures_master.db"
+ANALYZE_JSON="data/analyzer.JSON"

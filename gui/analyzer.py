@@ -2,11 +2,12 @@ import gtk
 import json
 import cv
 from lib import gesture
+from config import ANALYZE_JSON
 class Analyzer(gtk.Window):
 
     def __init__(self,generate=False):
         super(Analyzer, self).__init__()
-        self.analyzer_data=eval(json.load(open("data/analyzer.JSON"))["points"])
+        self.analyzer_data=eval(json.load(open(ANALYZE_JSON))["points"])
         self.analyzer_index=0
         if generate:
             self.analyze_all()
