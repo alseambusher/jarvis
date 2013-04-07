@@ -1,6 +1,6 @@
 import cv
 from config import GRID_NUM,ALLOWANCE,MIN_GRID_SIZE
-import sqlite3
+from basic import db_connect
 
 #returns states through which the points have passed through
 def gesture_extract(points):
@@ -60,35 +60,38 @@ def find_trend(old_cluster,new_cluster):
 
 #pass points  full detail of gesture
 def search_gesture(points):
-    gestureEXTRACT=gesture_extract(points)
-    conn=sqlite3.connect("data/gestures.db")
-    cur=conn.cursor()
-    cur.execute("select * from gestures where sequence='%s'"%'->'.join(gestureEXTRACT))
-    return cur.fetchall()
+    gesture_sequence="->".join(gesture_extract(points))
+    return search_gesture_by_field('sequence',gesture_sequence)
 
 #fields are name,comment,command,sequence
 def search_gesture_by_field(field,value):
-    conn=sqlite3.connect("data/gestures.db")
+    conn=db_connect()
     cur=conn.cursor()
     cur.execute("select * from gestures where %s='%s'"%(field,value))
     return cur.fetchall()
 
 def get_all_gestures():
-    conn=sqlite3.connect("data/gestures.db")
+    conn=db_connect()
     cur=conn.cursor()
     cur.execute("select * from gestures")
     return cur.fetchall()
 
 def add_gesture(sequence,name,comment,command):
-    conn=sqlite3.connect("data/gestures.db")
+    conn=db_connect()
     cur=conn.cursor()
     cur.execute("insert into gestures values('%s','%s','%s','%s')"%(name,comment,command,sequence))
     conn.commit()
 
 def delete_gesture(field,value):
-    conn=sqlite3.connect("data/gestures.db")
+    conn=db_connect()
     cur=conn.cursor()
     cur.execute("delete from gestures where %s='%s'"%(field,value))
+    conn.commit()
+
+def update_gesture(sequence,name,comment,command):
+    conn=db_connect()
+    cur=conn.cursor()
+    cur.execute("update gestures set comment='%s', command='%s',sequence='%s' where name='%s'"%(comment,command,sequence,name))
     conn.commit()
 
 #Returns an image after analysis

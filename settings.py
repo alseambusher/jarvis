@@ -4,6 +4,7 @@ from gui import analyzer
 from gui import add as add_gesture_dialog
 from gui import edit as edit_gesture_dialog
 from lib import gesture
+from config import DB,DB_MASTER
 class Settings(gtk.Window):
     def __init__(self):
         super(Settings, self).__init__()
@@ -39,11 +40,8 @@ class Settings(gtk.Window):
 
     def reset_jarvis(self,widget):
         if self.dialog_response is -5:
-            if not os.system("cp data/gestures_master.db data/gestures.db"):
-                print "Jarvis reset success"
+            if not os.system("cp %s %s"%(DB_MASTER,DB)):
                 self.refresh_list()
-            else:
-                print "Jarvis reset failed"
 
     def edit(self,widget):
         gesture_name=" ".join(widget.get_label().split(" ")[1:])
