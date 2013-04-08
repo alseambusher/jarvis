@@ -2,7 +2,7 @@ import gtk
 import json
 import cv
 from lib import gesture
-from config import ANALYZE_JSON
+from config import ANALYZE_JSON,RES
 class Analyzer(gtk.Window):
 
     def __init__(self,generate=False):
@@ -30,7 +30,7 @@ class Analyzer(gtk.Window):
             gtk.FILL, 0, 0);
 
         self.analyzer=gtk.Image()
-        self.analyzer.set_from_file("res/analyzer_0.bmp")
+        self.analyzer.set_from_file(RES+"analyzer_0.bmp")
 
         table.attach(self.analyzer, 0, 2, 1, 3, gtk.FILL | gtk.EXPAND,
             gtk.FILL | gtk.EXPAND, 1, 1)
@@ -67,7 +67,7 @@ class Analyzer(gtk.Window):
         img,sequence=gesture.analyzer(self.analyzer_data[self.analyzer_index])
 
         self.sequence.set_text("Gesture State Transition: "+"->".join(sequence))
-        self.analyzer.set_from_file("res/analyzer_"+str(self.analyzer_index)+".bmp")
+        self.analyzer.set_from_file(RES+"analyzer_"+str(self.analyzer_index)+".bmp")
 
     def analyze_all(self):
         for i in range(len(self.analyzer_data)):

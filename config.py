@@ -1,13 +1,5 @@
 """
 Configuration file of JARVIS
-
-      #    ##    #####   #    #     #     ####
-      #   #  #   #    #  #    #     #    #
-      #  #    #  #    #  #    #     #     ####
-      #  ######  #####   #    #     #         #
- #    #  #    #  #   #    #  #      #    #    #
-  ####   #    #  #    #    ##       #     ####
-
 """
 
 TRACKER_COLOR={'MIN':[20,100,100],'MAX':[30,255,255]}
@@ -31,3 +23,13 @@ MIN_GRID_SIZE=25
 DB="data/gestures.db"
 DB_MASTER="data/gestures_master.db"
 ANALYZE_JSON="data/analyzer.JSON"
+RES="res/"
+
+#Working Directory
+CWD='/home/alse/alse_python/jarvis/'
+
+#DONT EDIT THIS
+DB=CWD+DB
+DB_MASTER=CWD+DB_MASTER
+ANALYZE_JSON=CWD+ANALYZE_JSON
+RES=CWD+RES
