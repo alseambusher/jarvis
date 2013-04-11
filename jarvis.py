@@ -32,7 +32,7 @@ def main():
         if(optimized_centerX and optimized_centerY):
             x.mouse_move(optimized_centerX,optimized_centerY)
             old_center=data.center
-        #cv.ShowImage("jarvis",color_image)
+        cv.ShowImage("jarvis",color_image)
         x.keyboard_callback(cv.WaitKey(10))
 if __name__=='__main__':
     main()
