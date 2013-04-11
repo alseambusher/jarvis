@@ -72,7 +72,7 @@ class Analyzer(gtk.Window):
     def analyze_all(self):
         for i in range(len(self.analyzer_data)):
             img,sequence=gesture.analyzer(self.analyzer_data[i])
-            cv.SaveImage("res/analyzer_"+str(i)+".bmp",img)
+            cv.SaveImage(RES+"analyzer_"+str(i)+".bmp",img)
 
 
 if __name__=="__main__":
