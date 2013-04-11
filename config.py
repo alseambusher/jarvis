@@ -3,10 +3,10 @@ Configuration file of JARVIS
 """
 
 TRACKER_COLOR={'MIN':[20,100,100],'MAX':[30,255,255]}
-GESTURE_COLOR={'MIN': [178.0, 100, 10],'MAX': [188.0, 255, 255]}
+GESTURE_COLOR={'MIN': [108.0, 100, 10],'MAX': [118.0, 255, 255]}
 RESOLUTION=[1366,768]
-MANUAL_CONFIGURATION=True
-TRACK=False
+SCALE_FACTOR=1+0.2
+MANUAL_CONFIGURATION=False
 """
 	Set ANALYZE if you want to keep track of all the data due to gestures. This will however make the system very slow.
 """

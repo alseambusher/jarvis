@@ -16,18 +16,43 @@ def main():
         x.keyboard_callback(cv.WaitKey(10))
     cv.DestroyWindow("jarvis")
 
+    gesture_tolerance=0 # holds number of continuous null returned
+    gesture_started=False
+    gesture_points=[]
     while(1):
-        color_image,data=track.track_data(cv.QueryFrame(capture))
-        data=track.filter_fingers(data)
+        color_image,data=track.track_data(cv.QueryFrame(capture),config.TRACKER_COLOR)
+        gesture_image,gesture_data=track.track_data(cv.QueryFrame(capture),config.GESTURE_COLOR)
+
+        data=track.filter_contour(data)
+        gesture_data=track.filter_contour(gesture_data)
+
+        #10% tolerance
+        if data.areas:
+            if  not gesture_started and gesture_data.areas and max(gesture_data.areas)>0.8*max(data.areas) and max(gesture_data.areas)<1.2*max(data.areas):
+                gesture_tolerance=0
+                gesture_started=True
+                gesture_points=[]
+                print "gesture started!!"
+
+            elif not gesture_data.areas and gesture_started:
+                if gesture_tolerance>3:
+                    gesture_tolerance=0
+                    gesture_started=False
+                    print gesture_points
+                    try:
+                        print gesture.gesture_extract(gesture_points)
+                    except:
+                        print "No match!"
+                    gesture_points=[]
+                    print "gesture stopped!"
+                else:
+                    gesture_tolerance+=1
+            else:
+                #keep adding to gesture queue
+                gesture_points.append((data.center['x'],data.center['y']))
+
         #Optimize mouse center based on previous data before moving mouse
         optimized_centerX,optimized_centerY=track.optimize_mouse_center(old_center,data.center)
-        #TODO delete this
-        z=[optimized_centerX,optimized_centerY]
-        if config.TRACK:
-            try:
-                print (cv.Round((z[0]*640)/(1366*1.02)),cv.Round((z[1]*480)/(768*1.02)))
-            except:
-                pass
 
         if(optimized_centerX and optimized_centerY):
             x.mouse_move(optimized_centerX,optimized_centerY)

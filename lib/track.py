@@ -9,18 +9,18 @@ Functions in this file
 import cv
 from basic import dummy_object
 import config
-def getthresholdedimg(im):
+def getthresholdedimg(im,color_range):
     imghsv=cv.CreateImage(cv.GetSize(im),8,3)
     cv.CvtColor(im,imghsv,cv.CV_BGR2HSV)				# Convert image from RGB to HSV
     imgthreshold=cv.CreateImage(cv.GetSize(im),8,1)
-    cv.InRangeS(imghsv,config.TRACKER_COLOR['MIN'],config.TRACKER_COLOR['MAX'],imgthreshold)	# Select a range of yellow color
+    cv.InRangeS(imghsv,color_range['MIN'],color_range['MAX'],imgthreshold)	# Select a range of yellow color
     return imgthreshold
 
-def track_data(frame):#this gets all data and the color_image from a given frame
+def track_data(frame,color_range):#this gets all data and the color_image from a given frame
     color_image = frame
     cv.Flip(color_image,color_image,1)
     cv.Smooth(color_image, color_image, cv.CV_GAUSSIAN, 3, 0)
-    imgyellowthresh=getthresholdedimg(color_image)
+    imgyellowthresh=getthresholdedimg(color_image,color_range)
     cv.Erode(imgyellowthresh,imgyellowthresh,None,3)
     cv.Dilate(imgyellowthresh,imgyellowthresh,None,10)
     storage = cv.CreateMemStorage(0)
@@ -57,27 +57,17 @@ def track_data(frame):#this gets all data and the color_image from a given frame
     return color_image,data
 
 def optimize_mouse_center(old_center,new_center):#returns optimized centers based on old centers
-    #TODO add acceleration component
-    #TODO remove shiver component
     try:
-        scale_factor=1+0.2
         if(new_center and (old_center!=new_center)):
-            return (new_center['x']*config.RESOLUTION[0]*scale_factor)/640,(new_center['y']*config.RESOLUTION[1]*scale_factor)/480
+            return (new_center['x']*config.RESOLUTION[0]*config.SCALE_FACTOR)/640,(new_center['y']*config.RESOLUTION[1]*config.SCALE_FACTOR)/480
     except:
         pass
     return None,None
 
-def filter_fingers(data):#this function extracts the objects required
-    #TODO find the objects with mean area
-    #TODO FIX this
-    max_area=0
-    maxi=0
-    for i in range(0,len(data.areas)):
-        if data.areas[i]>max_area:
-            max_area=data.areas[i]
-            maxi=i
+def filter_contour(data):#returns with adjusted center
     try:
-        data.center={'x':data.centers[maxi][0],'y':data.centers[maxi][1]}
+        index=data.areas.index(max(data.areas))
+        data.center={'x':data.centers[index][0],'y':data.centers[index][1]}
     except:
         data.center=find_center(data.centers)
     return data

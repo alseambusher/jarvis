@@ -12,12 +12,12 @@ def gesture_extract(points):
 
     #If cluster size is too small then straight line
     if cluster_size[0]<MIN_GRID_SIZE:
-        if points[0][1]<point[len(point)-1][1]:
+        if points[0][1]<points[len(points)-1][1]:
             return ["VTB"]
         else:
             return ["VBT"]
     if cluster_size[1]<MIN_GRID_SIZE:
-        if points[0][0]<points[len(point)-1][0]:
+        if points[0][0]<points[len(points)-1][0]:
             return ["SLR"]
         else:
             return ["SRL"]
