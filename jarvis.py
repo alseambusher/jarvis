@@ -42,7 +42,7 @@ def main():
                     print gesture_points
                     try:
                         print gesture.gesture_extract(gesture_points)
-                        print gesture.search_gesture(gesture_points)
+                        print "Executing: "+gesture.search_gesture(gesture_points)[0][2]
                         os.system(str(gesture.search_gesture(gesture_points)[0][2]))
                     except:
                         print "No match!"

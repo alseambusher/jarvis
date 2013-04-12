@@ -62,10 +62,6 @@ def get_clicked_color(event,x,y,flags,frame):
 #keyboard_callback
 def keyboard_callback(key):
     if key==27:
-        #TODO delete this
-        config.TRACK=True
-        print "started tracking"
-
-        #cv.DestroyWindow("jarvis")
-        #print "Cya bye!!"
-        #exit()
+        cv.DestroyWindow("jarvis")
+        print "Cya bye!!"
+        exit()
