@@ -6,8 +6,8 @@ class main(gtk.Window):
         super(main, self).__init__()
 
         self.set_title("Jarvis")
-        self.set_size_request(300,450)
-        self.set_position(gtk.WIN_POS_CENTER)
+        self.set_size_request(270,380)
+        self.move(10000,10000)
         self.set_frame_dimensions(108,0,8,0)
         self.set_resizable(False)
         self.set_keep_above(config.ALWAYS_ON_TOP)
@@ -65,27 +65,20 @@ class main(gtk.Window):
         hbox1.add(gesture_box)
         halign1=gtk.Alignment(0,0,1,0)
         halign1.add(hbox1)
+        halign1.set_border_width(8)
         vbox.pack_start(halign1, False, False, 10)
 
         #Second Row
         hbox2=gtk.HBox(True,5)
 
-        slr=gtk.Button("Left->Right")
-        srl=gtk.Button("Right->Left")
-        vtb=gtk.Button("Top->Bottom")
-        vbt=gtk.Button("Bottom->Top")
+        self.start_toggle=gtk.Button("Start Jarvis")
 
         #slr.connect("clicked",lambda x:self.gesture_box_text.insert_at_cursor("SLR->"))
-        #srl.connect("clicked",lambda x:self.gesture_box_text.insert_at_cursor("SRL->"))
-        #vtb.connect("clicked",lambda x:self.gesture_box_text.insert_at_cursor("VTB->"))
-        #vbt.connect("clicked",lambda x:self.gesture_box_text.insert_at_cursor("VBT->"))
 
-        hbox2.add(slr)
-        hbox2.add(srl)
-        hbox2.add(vtb)
-        hbox2.add(vbt)
+        hbox2.add(self.start_toggle)
         halign2=gtk.Alignment(0,0,1,0)
         halign2.add(hbox2)
+        halign2.set_border_width(8)
         vbox.pack_start(halign2, False, False, 10)
 
         #Third Row
