@@ -9,6 +9,7 @@ class Add(gtk.Window):
         self.set_position(gtk.WIN_POS_CENTER)
         self.set_border_width(8)
         self.modify_bg(gtk.STATE_NORMAL,gtk.gdk.Color("#ccc"))
+        self.set_resizable(False)
 
         vbox = gtk.VBox(True, 2)
 

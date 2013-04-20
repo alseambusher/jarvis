@@ -1,15 +1,22 @@
 import gtk
+import config
 from gui import settings
 class main(gtk.Window):
     def __init__(self):
         super(main, self).__init__()
 
         self.set_title("Jarvis")
-        self.set_size_request(400,250)
+        self.set_size_request(300,450)
         self.set_position(gtk.WIN_POS_CENTER)
-        self.set_border_width(8)
+        self.set_frame_dimensions(108,0,8,0)
+        self.set_resizable(False)
+        self.set_keep_above(config.ALWAYS_ON_TOP)
+        if config.ON_ALL_WORKSPACES:
+            self.stick()
+        self.set_opacity(config.OPACITY)
+        self.set_startup_id(config.WINDOW_ID)
 
-        vbox = gtk.VBox(True, 2)
+        vbox = gtk.VBox(False, 0)
 
         #MENU>>>>>>>>>>>
         mb = gtk.MenuBar()
@@ -51,6 +58,7 @@ class main(gtk.Window):
         gesture_box=gtk.TextView()
         self.gesture_box_text=gtk.TextBuffer(table=None)
         gesture_box.set_buffer(self.gesture_box_text)
+        gesture_box.set_editable(False)
         #self.gesture_box.get_buffer()
         gesture_box.set_wrap_mode(True)
         gesture_box.set_size_request(400,40)

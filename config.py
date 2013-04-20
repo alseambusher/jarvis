@@ -8,11 +8,6 @@ RESOLUTION=[1366,768]
 SCALE_FACTOR=1+0.2
 MANUAL_CONFIGURATION=False
 """
-	Set ANALYZE if you want to keep track of all the data due to gestures. This will however make the system very slow.
-"""
-ANALYZE=False
-
-"""
     ADVANCED CONFIGURATION. DONT EDIT IT IF YOU ARE NOT SURE
 """
 #Gesture settings
@@ -34,3 +29,11 @@ DB=CWD+DB
 DB_MASTER=CWD+DB_MASTER
 ANALYZE_JSON=CWD+ANALYZE_JSON
 RES=CWD+RES
+
+"""
+    GUI configuration
+"""
+WINDOW_ID="Jarvis"
+OPACITY=0.9
+ALWAYS_ON_TOP=True
+ON_ALL_WORKSPACES=True

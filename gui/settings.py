@@ -12,6 +12,7 @@ class Settings(gtk.Window):
         self.set_title("Jarvis Settings")
         self.set_size_request(500,500)
         self.set_position(gtk.WIN_POS_CENTER)
+        self.set_resizable(False)
 
         self.update_list()
 
@@ -73,10 +74,9 @@ class Settings(gtk.Window):
         analyzer_menu.connect("activate",self.start_analyze)
         filemenu.append(analyzer_menu)
 
-        #EXIT
-        exit = gtk.MenuItem("Exit")
-        exit.connect("activate", gtk.main_quit)
-        filemenu.append(exit)
+        close = gtk.MenuItem("Close")
+        close.connect("activate", lambda x: self.destroy())
+        filemenu.append(close)
 
         #HELP
         helpmenu = gtk.Menu()
