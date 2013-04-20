@@ -15,22 +15,9 @@ class Settings(gtk.Window):
 
         self.update_list()
 
-        self.connect("destroy", gtk.main_quit)
-
     def start_analyze(self,widget):
         analyzer.Analyzer(self.analyze_all)
         self.analyze_all=False
-
-    def about(self,widget):
-        about = gtk.AboutDialog()
-        about.set_program_name("Jarvis")
-        about.set_version("1.0")
-        about.set_copyright("(c) Jarvis ")
-        about.set_comments("Control your computer using hand motion, gestures to improve Human-Computer Interaction.")
-        about.set_website("http://www.lifepluslinux.blogspot.in")
-        #about.set_logo(gtk.gdk.pixbuf_new_from_file("battery.png"))
-        about.run()
-        about.destroy()
 
     def prompt(self,message,target):
         dialog = gtk.MessageDialog(self,gtk.DIALOG_DESTROY_WITH_PARENT,gtk.MESSAGE_QUESTION,gtk.BUTTONS_OK_CANCEL,message)
@@ -102,12 +89,7 @@ class Settings(gtk.Window):
         reset= gtk.MenuItem("Reset Jarvis")
         reset.connect("activate",lambda x:self.prompt("Click OK to reset Jarvis. Note that this process is Irreversible!",self.reset_jarvis))
 
-        #ABOUT
-        about=gtk.MenuItem("About")
-        about.connect("activate",self.about)
-        #about.connect("activate",lambda x:edit_gesture_dialog.Edit('1','2','3','4'))
         helpmenu.append(reset)
-        helpmenu.append(about)
 
         self.sv=gtk.ScrolledWindow()
         self.vbox = gtk.VBox(False, 2)
@@ -154,5 +136,3 @@ class Settings(gtk.Window):
         self.sv.destroy()
         self.update_list()
 
-Settings()
-gtk.main()
