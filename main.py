@@ -20,7 +20,6 @@ class main(gtk.Window):
         self.set_opacity(config.OPACITY)
         self.set_startup_id(config.WINDOW_ID)
 
-        gtk.gdk.threads_init()
 
         vbox = gtk.VBox(False, 0)
 
@@ -209,5 +208,8 @@ class main(gtk.Window):
         gtk.main_quit()
 
 if __name__=='__main__':
+    gtk.gdk.threads_init()
+    gtk.gdk.threads_enter()
     main()
+    gtk.gdk.threads_leave()
     gtk.main()
