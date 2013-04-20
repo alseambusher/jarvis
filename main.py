@@ -73,14 +73,15 @@ class main(gtk.Window):
 
         #First Row
         hbox1=gtk.HBox(True,5)
+        self.console_holder=gtk.ScrolledWindow()
         console=gtk.TextView()
         self.console_text=gtk.TextBuffer(table=None)
         console.set_buffer(self.console_text)
         console.set_editable(False)
-        #self.gesture_box.get_buffer()
         console.set_wrap_mode(True)
-        console.set_size_request(400,40)
-        hbox1.add(console)
+        console.set_size_request(400,100)
+        self.console_holder.add(console)
+        hbox1.add(self.console_holder)
         halign1=gtk.Alignment(0,0,1,0)
         halign1.add(hbox1)
         halign1.set_border_width(8)
@@ -120,11 +121,12 @@ class main(gtk.Window):
     def jarvis_toggle(self,widget):
         self.STATUS=not self.STATUS
         if self.STATUS:
+            self.log("Jarvis Started...")
             self.start_toggle.set_label("Stop Jarvis")
-            time.sleep(0.05)
             self.jarvis=threading.Thread(target=self.run)
             self.jarvis.start()
         else:
+            self.log("Jarvis Stopped...")
             self.start_toggle.set_label("Restart Jarvis")
 
     def run(self):
@@ -159,21 +161,20 @@ class main(gtk.Window):
                     gesture_tolerance=0
                     gesture_started=True
                     gesture_points=[]
-                    print "gesture started!!"
+                    self.log("gesture started!!")
 
                 elif not gesture_data.areas and gesture_started:
                     if gesture_tolerance>3:
                         gesture_tolerance=0
                         gesture_started=False
-                        print gesture_points
                         try:
-                            print gesture.gesture_extract(gesture_points)
-                            print "Executing: "+gesture.search_gesture(gesture_points)[0][2]
+                            self.log("->".join(gesture.gesture_extract(gesture_points)))
+                            self.log("Executing: "+gesture.search_gesture(gesture_points)[0][2])
                             basic._exe(str(gesture.search_gesture(gesture_points)[0][2]))
                         except:
-                            print "No match!"
+                            self.log("No match!")
                         gesture_points=[]
-                        print "gesture stopped!"
+                        self.log("gesture stopped!")
                     else:
                         gesture_tolerance+=1
                 else:
@@ -193,7 +194,13 @@ class main(gtk.Window):
             pix_buf=gtk.gdk.pixbuf_new_from_array(pix_buf,gtk.gdk.COLORSPACE_RGB,8)
             pix_buf=pix_buf.scale_simple(213,160,gtk.gdk.INTERP_BILINEAR)
             self.video.set_from_pixbuf(pix_buf)
-            time.sleep(0.1)
+            time.sleep(0.05)
+
+    def log(self,message):
+        self.console_text.insert_at_cursor(message+"\n")
+        #AUTO SCROLL
+        adj=self.console_holder.get_vadjustment()
+        adj.set_value(adj.upper - adj.page_size)
 
     def kill_jarvis(self,widget):
         self.STATUS=False
