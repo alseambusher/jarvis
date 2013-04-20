@@ -29,6 +29,7 @@ def main():
 
         #10% tolerance
         if data.areas:
+            #if  not gesture_started and gesture_data.areas:
             if  not gesture_started and gesture_data.areas and max(gesture_data.areas)>0.8*max(data.areas) and max(gesture_data.areas)<1.2*max(data.areas):
                 gesture_tolerance=0
                 gesture_started=True

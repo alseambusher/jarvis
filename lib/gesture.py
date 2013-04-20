@@ -11,7 +11,6 @@ def gesture_extract(points):
     cluster_size=((max(X)-min(X))/(GRID_NUM-2*ALLOWANCE),(max(Y)-min(Y))/(GRID_NUM-2*ALLOWANCE))
 
     #If cluster size is too small then straight line
-    #TODO Fix this
     if cluster_size[0]<MIN_GRID_SIZE:
         if points[0][1]<points[len(points)-1][1]:
             return ["VTB"]
