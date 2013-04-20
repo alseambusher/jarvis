@@ -4,7 +4,7 @@ import sqlite3
 from config import DB
 
 def _exe(command):
-    os.system(command)
+    os.system(command+"&")
 
 def pipe(command,kind='str'):
     #TODO this will be executed in some other shell which should not happen. Think of some way to fix this and run in current shell

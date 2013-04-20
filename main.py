@@ -1,5 +1,9 @@
 import gtk
 import config
+import cv
+import threading
+import time
+from lib import track,x,gesture,basic
 from gui import settings
 class main(gtk.Window):
     def __init__(self):
@@ -15,6 +19,8 @@ class main(gtk.Window):
             self.stick()
         self.set_opacity(config.OPACITY)
         self.set_startup_id(config.WINDOW_ID)
+
+        gtk.gdk.threads_init()
 
         vbox = gtk.VBox(False, 0)
 
@@ -33,7 +39,7 @@ class main(gtk.Window):
 
         #EXIT
         exit = gtk.MenuItem("Exit")
-        exit.connect("activate", gtk.main_quit)
+        exit.connect("activate", self.kill_jarvis)
         filemenu.append(exit)
 
         #HELP
@@ -52,28 +58,42 @@ class main(gtk.Window):
 
         #MENU ENDS>>>>>>
 
+        #Zeroth Row
+        hbox0=gtk.HBox(True,5)
+        self.video=gtk.Image()
+        self.video.set_size_request(213,160)
+        self.video.set_from_file(config.ICON)
+
+        hbox0.add(self.video)
+
+        halign0=gtk.Alignment(0,0,1,0)
+        halign0.add(hbox0)
+        halign0.set_border_width(1)
+        vbox.pack_start(halign0, False, False, 10)
 
         #First Row
         hbox1=gtk.HBox(True,5)
-        gesture_box=gtk.TextView()
-        self.gesture_box_text=gtk.TextBuffer(table=None)
-        gesture_box.set_buffer(self.gesture_box_text)
-        gesture_box.set_editable(False)
+        console=gtk.TextView()
+        self.console_text=gtk.TextBuffer(table=None)
+        console.set_buffer(self.console_text)
+        console.set_editable(False)
         #self.gesture_box.get_buffer()
-        gesture_box.set_wrap_mode(True)
-        gesture_box.set_size_request(400,40)
-        hbox1.add(gesture_box)
+        console.set_wrap_mode(True)
+        console.set_size_request(400,40)
+        hbox1.add(console)
         halign1=gtk.Alignment(0,0,1,0)
         halign1.add(hbox1)
         halign1.set_border_width(8)
-        vbox.pack_start(halign1, False, False, 10)
+        vbox.pack_start(halign1, False, False, 0)
 
         #Second Row
         hbox2=gtk.HBox(True,5)
 
         self.start_toggle=gtk.Button("Start Jarvis")
+        self.STATUS=False
 
         #slr.connect("clicked",lambda x:self.gesture_box_text.insert_at_cursor("SLR->"))
+        self.start_toggle.connect("clicked",self.jarvis_toggle)
 
         hbox2.add(self.start_toggle)
         halign2=gtk.Alignment(0,0,1,0)
@@ -81,21 +101,8 @@ class main(gtk.Window):
         halign2.set_border_width(8)
         vbox.pack_start(halign2, False, False, 10)
 
-        #Third Row
 
-        hbox3=gtk.HBox(False,5)
-        gesture_name_label=gtk.Label("Gesture:")
-        self.gesture_name=gtk.Entry()
-        self.gesture_name.set_size_request(300,self.gesture_name.get_size_request()[1])
-
-        hbox3.add(gesture_name_label)
-        hbox3.add(self.gesture_name)
-
-        halign3=gtk.Alignment(0,0,0,0)
-        halign3.add(hbox3)
-        vbox.pack_start(halign3, False, False, 0)
-
-        self.connect("destroy", gtk.main_quit)
+        self.connect("destroy", self.kill_jarvis)
         self.add(vbox)
         self.show_all()
 
@@ -110,5 +117,90 @@ class main(gtk.Window):
         about.run()
         about.destroy()
 
-main()
-gtk.main()
+    def jarvis_toggle(self,widget):
+        self.STATUS=not self.STATUS
+        if self.STATUS:
+            self.start_toggle.set_label("Stop Jarvis")
+            time.sleep(0.05)
+            self.jarvis=threading.Thread(target=self.run)
+            self.jarvis.start()
+        else:
+            self.start_toggle.set_label("Restart Jarvis")
+
+    def run(self):
+        old_center=None
+        cv.NamedWindow("jarvis")
+        capture=cv.CaptureFromCAM(0)
+        #Click on named window and obtain its color using this callback
+        cv.SetMouseCallback("jarvis",x.get_clicked_color,cv.QueryFrame(capture))
+
+        #If manual configuration is enabled
+        while config.MANUAL_CONFIGURATION:
+            configuration=cv.QueryFrame(capture)
+            cv.Flip(configuration,configuration,1)
+            cv.ShowImage("jarvis",configuration)
+            x.keyboard_callback(cv.WaitKey(10))
+        cv.DestroyWindow("jarvis")
+
+        gesture_tolerance=0 # holds number of continuous null returned
+        gesture_started=False
+        gesture_points=[]
+        while self.STATUS:
+            color_image,data=track.track_data(cv.QueryFrame(capture),config.TRACKER_COLOR)
+            gesture_image,gesture_data=track.track_data(cv.QueryFrame(capture),config.GESTURE_COLOR)
+
+            data=track.filter_contour(data)
+            gesture_data=track.filter_contour(gesture_data)
+
+            if data.areas:
+            #20% tolerance
+                #if  not gesture_started and gesture_data.areas:
+                if  not gesture_started and gesture_data.areas and max(gesture_data.areas)>0.8*max(data.areas) and max(gesture_data.areas)<1.2*max(data.areas):
+                    gesture_tolerance=0
+                    gesture_started=True
+                    gesture_points=[]
+                    print "gesture started!!"
+
+                elif not gesture_data.areas and gesture_started:
+                    if gesture_tolerance>3:
+                        gesture_tolerance=0
+                        gesture_started=False
+                        print gesture_points
+                        try:
+                            print gesture.gesture_extract(gesture_points)
+                            print "Executing: "+gesture.search_gesture(gesture_points)[0][2]
+                            basic._exe(str(gesture.search_gesture(gesture_points)[0][2]))
+                        except:
+                            print "No match!"
+                        gesture_points=[]
+                        print "gesture stopped!"
+                    else:
+                        gesture_tolerance+=1
+                else:
+                    #keep adding to gesture queue
+                    gesture_points.append((data.center['x'],data.center['y']))
+
+            #Optimize mouse center based on previous data before moving mouse
+            optimized_centerX,optimized_centerY=track.optimize_mouse_center(old_center,data.center)
+
+            if(optimized_centerX and optimized_centerY):
+                x.mouse_move(optimized_centerX,optimized_centerY)
+                old_center=data.center
+
+            #Add to gtk.Image
+            cv.CvtColor(color_image,color_image,cv.CV_BGR2RGB)
+            pix_buf=track.ipl2array(color_image)
+            pix_buf=gtk.gdk.pixbuf_new_from_array(pix_buf,gtk.gdk.COLORSPACE_RGB,8)
+            pix_buf=pix_buf.scale_simple(213,160,gtk.gdk.INTERP_BILINEAR)
+            self.video.set_from_pixbuf(pix_buf)
+            time.sleep(0.1)
+
+    def kill_jarvis(self,widget):
+        self.STATUS=False
+        time.sleep(0.1)
+        gtk.gdk.threads_leave()
+        gtk.main_quit()
+
+if __name__=='__main__':
+    main()
+    gtk.main()
