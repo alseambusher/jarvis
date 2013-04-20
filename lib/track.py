@@ -9,6 +9,7 @@ Functions in this file
 import cv
 from basic import dummy_object
 import config
+import numpy as N
 def getthresholdedimg(im,color_range):
     imghsv=cv.CreateImage(cv.GetSize(im),8,3)
     cv.CvtColor(im,imghsv,cv.CV_BGR2HSV)				# Convert image from RGB to HSV
@@ -83,3 +84,19 @@ def find_center(centers):#given centers this will find a center
         return center
     except:
         center=None
+def ipl2array(im):
+    depth2dtype = {
+        cv.IPL_DEPTH_8U: 'uint8',
+        cv.IPL_DEPTH_8S: 'int8',
+        cv.IPL_DEPTH_16U: 'uint16',
+        cv.IPL_DEPTH_16S: 'int16',
+        cv.IPL_DEPTH_32S: 'int32',
+        cv.IPL_DEPTH_32F: 'float32',
+        cv.IPL_DEPTH_64F: 'float64',
+    }
+
+    a = N.fromstring(im.tostring(),
+                     dtype=depth2dtype[im.depth],
+                     count=im.width * im.height * im.nChannels)
+    a.shape = (im.height, im.width, im.nChannels)
+    return a
