@@ -5,6 +5,7 @@ Control your LINUX system using hand motion, gestures using Jarvis.
 2. pygtk
 3. python-opencv
 4. xprop,xwit,xdotool
+
 ##Install and configure
 > <code>./install</code>  
 > Configuration file exists in <i>~/.jarvis/config.py</i>
