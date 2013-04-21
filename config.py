@@ -1,3 +1,4 @@
+import os
 """
 Configuration file of JARVIS
 """
@@ -22,7 +23,7 @@ ANALYZE_JSON="data/analyzer.JSON"
 RES="res/"
 
 #Working Directory
-CWD='/home/alse/alse_python/jarvis/'
+CWD=os.getenv("HOME")+'/.jarvis/'
 
 #DONT EDIT THIS
 DB=CWD+DB

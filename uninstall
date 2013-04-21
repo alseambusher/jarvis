@@ -1,0 +1,3 @@
+rm -rf ~/.jarvis
+rm ~/.local/share/applications/jarvis.desktop
+echo "If no error occured then uninstallation successful!!"

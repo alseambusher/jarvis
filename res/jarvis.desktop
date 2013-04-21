@@ -1,0 +1,11 @@
+[Desktop Entry]
+Actions=Window;Document;
+Categories=GNOME;GTK;Utility;
+Comment=Jarvis application
+GenericName=Jarvis
+Name=Jarvis
+StartupNotify=true
+Terminal=false
+Type=Application
+X-GNOME-FullName=Jarvis
+X-Ubuntu-Gettext-Domain=Jarvis

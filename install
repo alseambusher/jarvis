@@ -1,15 +1,7 @@
 #!/bin/bash
-type xdotool xprop xwit 2>/dev/null
-if [ $? -ne 0 ]
-then
-    echo "Dependencies have to be installed"
-#Uncomment or comment depending on your package manager
-#   sudo aptitude install xdotool xprop xwit
-#   sudo pacman install xdotool xprop xwit
-#   sudo yum install xdootool xprop xwit
-#   sudo brew install xdootool xprop xwit
-    sudo apt-get install xdotool xprop xwit
-fi
 mkdir ~/.jarvis
 cp -R * ~/.jarvis
-#TODO add menu item
+cp res/jarvis.desktop ~/.local/share/applications/
+echo "Exec=python "$HOME"/.jarvis/main.py">>~/.local/share/applications/jarvis.desktop
+echo "Icon="$HOME"/.jarvis/res/jarvis.png">>~/.local/share/applications/jarvis.desktop
+echo "If no error occured then installation successful!!"
