@@ -188,12 +188,15 @@ class main(gtk.Window):
                 old_center=data.center
 
             #Add to gtk.Image
-            cv.CvtColor(color_image,color_image,cv.CV_BGR2RGB)
-            pix_buf=track.ipl2array(color_image)
-            pix_buf=gtk.gdk.pixbuf_new_from_array(pix_buf,gtk.gdk.COLORSPACE_RGB,8)
-            pix_buf=pix_buf.scale_simple(213,160,gtk.gdk.INTERP_BILINEAR)
-            self.video.set_from_pixbuf(pix_buf)
-            time.sleep(0.05)
+            try:
+                cv.CvtColor(color_image,color_image,cv.CV_BGR2RGB)
+                pix_buf=track.ipl2array(color_image)
+                pix_buf=gtk.gdk.pixbuf_new_from_array(pix_buf,gtk.gdk.COLORSPACE_RGB,8)
+                pix_buf=pix_buf.scale_simple(213,160,gtk.gdk.INTERP_BILINEAR)
+                self.video.set_from_pixbuf(pix_buf)
+            except:
+                pass
+            time.sleep(0.01)
 
     def log(self,message):
         self.console_text.insert_at_cursor(message+"\n")
@@ -203,7 +206,7 @@ class main(gtk.Window):
 
     def kill_jarvis(self,widget):
         self.STATUS=False
-        time.sleep(0.1)
+        time.sleep(0.01)
         gtk.gdk.threads_leave()
         gtk.main_quit()
 
