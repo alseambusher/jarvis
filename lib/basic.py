@@ -4,7 +4,7 @@ import sqlite3
 from config import DB
 
 def _exe(command):
-    os.system("bash -c '"+command+"&'")
+    os.system("bash -c '"+command+"&'>/dev/null")
 
 def pipe(command,kind='str'):
     if kind=='str':
