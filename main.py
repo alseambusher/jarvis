@@ -154,9 +154,9 @@ class main(gtk.Window):
             gesture_data=track.filter_contour(gesture_data)
 
             if data.areas:
-            #20% tolerance
                 #if  not gesture_started and gesture_data.areas:
-                if  not gesture_started and gesture_data.areas and max(gesture_data.areas)>0.8*max(data.areas) and max(gesture_data.areas)<1.2*max(data.areas):
+                tolerance=0.3
+                if  not gesture_started and gesture_data.areas and max(gesture_data.areas)>(1-tolerance)*max(data.areas) and max(gesture_data.areas)<(1+tolerance)*max(data.areas):
                     gesture_tolerance=0
                     gesture_started=True
                     gesture_points=[]
