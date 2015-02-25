@@ -1,5 +1,6 @@
 ##Introdution
-Control your LINUX system using hand motion, gestures using Jarvis.  
+Control your LINUX system using hand motion, gestures using Jarvis.    
+Read more about it [here](http://lifepluslinux.blogspot.in/2013/05/jarvis-at-your-sevice.html)
 ##Requirements
 1. Python
 2. pygtk
